@@ -1,16 +1,36 @@
+#!/usr/bin/env python3
+
 from helpers import *
 from shutil import copyfile
+from sys import platform
 import json
 import os
 
 
 DIR_OF_XPI = ".."
 PATH_TO_XPI = os.path.join(DIR_OF_XPI, "viszot.xpi")
-DIR_OF_LZ4 = os.path.join(os.path.expanduser("~"),
-                          "Library",
-                          "Application Support",
-                          "Zotero"
-                          )
+DIR_OF_LZ4 = None
+# https://stackoverflow.com/a/8220141:
+if platform == "linux":
+    # Linux
+    pass
+elif platform == "darwin":
+    # OS X
+    DIR_OF_LZ4 = os.path.join(os.path.expanduser("~"),
+                              "Library",
+                              "Application Support",
+                              "Zotero"
+                              )
+elif platform == "win32":
+    # Windows
+    DIR_OF_LZ4 = os.path.join(os.path.expanduser("~"),
+                              "AppData",
+                              "Roaming",
+                              "Zotero",
+                              "Zotero"
+                              )
+
+
 profile_rel_path = get_default_from_profiles_ini(os.path.join(DIR_OF_LZ4, "profiles.ini"))
 DIR_OF_LZ4 = os.path.join(DIR_OF_LZ4, profile_rel_path)
 PATH_TO_LZ4 = os.path.join(DIR_OF_LZ4, "addonStartup.json.lz4")
