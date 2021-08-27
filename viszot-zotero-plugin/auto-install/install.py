@@ -29,8 +29,6 @@ elif platform == "win32":
                               "Zotero",
                               "Zotero"
                               )
-
-
 profile_rel_path = get_default_from_profiles_ini(os.path.join(DIR_OF_LZ4, "profiles.ini"))
 DIR_OF_LZ4 = os.path.join(DIR_OF_LZ4, profile_rel_path)
 PATH_TO_LZ4 = os.path.join(DIR_OF_LZ4, "addonStartup.json.lz4")
@@ -45,7 +43,7 @@ def register_in_lz4_and_copy_xpi():
     object_out = {}
     out_json_filename = os.path.splitext(os.path.basename(PATH_TO_LZ4))[0]
     # Decompress & read original .json.lz4 file:
-    decompress_json_lz4(PATH_TO_LZ4, out_json_filename)
+    decompress_json_lz4(PATH_TO_LZ4, out_json_filename, platform)
     with open(out_json_filename, "r") as jsonf:
         original_json = json.load(jsonf)
         original_app_global = original_json["app-global"]
@@ -85,7 +83,7 @@ def register_in_lz4_and_copy_xpi():
     with open(out_json_filename, "w") as jsonf:
         json.dump(object_out, jsonf)
     # Compress & write new lz4 file (overwrite)
-    compress_json_lz4(out_json_filename, PATH_TO_LZ4)
+    compress_json_lz4(out_json_filename, PATH_TO_LZ4, platform)
     # Delete local copy of json file:
     os.remove(out_json_filename)
     return path
@@ -154,4 +152,4 @@ def modify_extensions_json(path):
 if __name__ == "__main__":
     path = register_in_lz4_and_copy_xpi()
     modify_extensions_json(path)
-    os.write(1, b"Viszot installed successfully!\n")
+    os.write(1, b"VisZot installed successfully!\n")
