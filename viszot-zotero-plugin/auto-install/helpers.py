@@ -1,3 +1,4 @@
+import lz4.block
 import os
 import re
 import time
@@ -10,23 +11,19 @@ def timestamp_now():
 
 
 def compress_json_lz4(filepath_in, filepath_out, platform):
-    if platform == "win32":
-        os.system('"{} {} temp.json.lz4"'.format(os.path.join("lz4-win64", "lz4.exe"), filepath_in))
-    with open("temp.json.lz4", "rb") as valid_bytes:
-        with open(filepath_out, "wb") as outfile:
-            outfile.write(b"mozLz40\0"+valid_bytes)
-    os.remove("temp.json.lz4")
+    with open(filepath_in, 'rb') as bytestream:
+        compressed = lz4.block.compress(bytestream.read())
+        with open(filepath_out, 'wb') as outfile:
+            outfile.write(b"mozLz40\0" + compressed)
 
 
 def decompress_json_lz4(filepath_in, filepath_out, platform):
-    with open(filepath_in, "rb") as file_obj:
-        file_obj.read(8)  # skip past the b"mozLz40\0" header
-        valid_bytes = file_obj.read()
-        with open("temp.json.lz4", "wb") as valid_lz4:
-            valid_lz4.write(valid_bytes)
-    if platform == "win32":
-        os.system('"{} -d temp.json.lz4 {}"'.format(os.path.join("lz4-win64", "lz4.exe"), filepath_out))
-    os.remove("temp.json.lz4")
+    with open(filepath_in, 'rb') as bytestream:
+        bytestream.read(8)  # skip past the b"mozLz40\0" header
+        valid_bytes = bytestream.read()
+        text = lz4.block.decompress(valid_bytes)
+        with open(filepath_out, 'wb') as outfile:
+            outfile.write(text)
 
 
 def decompress_xpi(filepath_in, path_out):
