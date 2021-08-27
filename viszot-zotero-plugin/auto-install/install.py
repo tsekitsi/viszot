@@ -11,7 +11,10 @@ DIR_OF_LZ4 = None
 # https://stackoverflow.com/a/8220141:
 if platform == "linux":
     # Linux
-    pass
+    DIR_OF_LZ4 = os.path.join(os.path.expanduser("~"),
+    			      ".zotero",
+    			      "zotero"
+    			      )
 elif platform == "darwin":
     # OS X
     DIR_OF_LZ4 = os.path.join(os.path.expanduser("~"),
@@ -73,6 +76,8 @@ def register_in_lz4_and_copy_xpi():
                                          }
                       }
             path = os.path.join(DIR_OF_LZ4, "extensions")
+            if not os.path.exists(path):
+            	os.makedirs(path)
             # Copy xpi to the designated path with the appropriate name:
             copyfile(PATH_TO_XPI, os.path.join(path, addon_info["id"]+".xpi"))
             # Append the json file:
