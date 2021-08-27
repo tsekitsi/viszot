@@ -15,7 +15,7 @@ In Zotero, go to "Tools -> Add-ons -> Tools for all Add-ons (the small, drop-dow
 
 **Auto installation**
 1. In the terminal, `cd` to the directory `viszot-zotero-plugin/auto-install`.
-2. Run `./install.sh` (you might need to allow executing the script by running `chmod 755 install.sh` first).
+2. Run `python install.py` (you might need to install required packages by running `pip install -r requirements.txt` first).
 
 ## System Requirements
 - Zotero 5.* Standalone
