@@ -7,8 +7,13 @@ var allItemsEndpoint = Zotero.Server.Endpoints["/viszot/allItems"] = function() 
 allItemsEndpoint.prototype = {
     "supportedMethods": ["GET"],
     "init": function(postData, sendResponseCallback) {
+        var items = Zotero.getActiveZoteroPane().getSelectedCollection().getChildItems();
+        var outString = "";
+        items.forEach(function(item) {
+            outString += ("<div>&#8226; "+item.getField('title', false, true)+"</div>");
+        })
         sendResponseCallback(200, "text/html",
-            "VisZot reporting..!"
+            outString //JSON.stringify(items)
         )
     }
 }
