@@ -17,6 +17,9 @@ In Zotero, go to "Tools -> Add-ons -> Tools for all Add-ons (the small, drop-dow
 1. In the terminal, `cd` to the directory `viszot-zotero-plugin/auto-install`.
 2. Run `python install.py` (you might need to install required packages by running `pip install -r requirements.txt` first).
 
+### 2) Installing the Google Chrome Extension
+In the Extensions managment view ("chrome://extensions/"), click "Load Unpacked" and select the "viszot-chrome-extension" directory when prompted.
+
 ## System Requirements
 - Zotero 5.* Standalone
 - Google Chrome 92.* browser
