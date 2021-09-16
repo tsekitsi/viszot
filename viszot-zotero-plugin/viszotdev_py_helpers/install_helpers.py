@@ -1,45 +1,12 @@
 from helpers import *
 from shutil import copyfile
-from sys import platform
 import json
-import os
 
 
-DIR_OF_XPI = ".."
-PATH_TO_XPI = os.path.join(DIR_OF_XPI, "viszot.xpi")
-DIR_OF_LZ4 = None
-# https://stackoverflow.com/a/8220141:
-if platform == "linux":
-    # Linux
-    DIR_OF_LZ4 = os.path.join(os.path.expanduser("~"),
-    			      ".zotero",
-    			      "zotero"
-    			      )
-elif platform == "darwin":
-    # OS X
-    DIR_OF_LZ4 = os.path.join(os.path.expanduser("~"),
-                              "Library",
-                              "Application Support",
-                              "Zotero"
-                              )
-elif platform == "win32":
-    # Windows
-    DIR_OF_LZ4 = os.path.join(os.path.expanduser("~"),
-                              "AppData",
-                              "Roaming",
-                              "Zotero",
-                              "Zotero"
-                              )
-profile_rel_path = get_default_from_profiles_ini(os.path.join(DIR_OF_LZ4, "profiles.ini"))
-DIR_OF_LZ4 = os.path.join(DIR_OF_LZ4, profile_rel_path)
-PATH_TO_LZ4 = os.path.join(DIR_OF_LZ4, "addonStartup.json.lz4")
-PATH_TO_EXTENSIONS_JSON = os.path.join(DIR_OF_LZ4, "extensions.json")
-
-# Read addon info:
-addon_info = get_addon_info(os.path.join(DIR_OF_XPI, "src", "install.rdf"))
-
-
-def register_in_lz4_and_copy_xpi():
+def register_in_lz4_and_copy_xpi(dir_of_xpi):
+    PATH_TO_XPI = join(dir_of_xpi, XPI_FNAME)
+    # Read addon info:
+    addon_info = get_addon_info(os.path.join(dir_of_xpi, "src", "install.rdf"))
     # Initialize dictionary:
     object_out = {}
     out_json_filename = os.path.splitext(os.path.basename(PATH_TO_LZ4))[0]
@@ -75,7 +42,7 @@ def register_in_lz4_and_copy_xpi():
                                          "enableShims": True
                                          }
                       }
-            path = os.path.join(DIR_OF_LZ4, "extensions")
+            path_to_extensions_dir = os.path.join(DIR_OF_LZ4, "extensions")
             if not os.path.exists(path):
             	os.makedirs(path)
             # Copy xpi to the designated path with the appropriate name:
@@ -89,10 +56,13 @@ def register_in_lz4_and_copy_xpi():
     compress_json_lz4(out_json_filename, PATH_TO_LZ4, platform)
     # Delete local copy of json file:
     os.remove(out_json_filename)
-    return path
+    return path_to_extensions_dir
 
 
-def modify_extensions_json(path):
+def modify_extensions_json(dir_of_xpi, path_to_extensions_dir):
+    PATH_TO_XPI = join(dir_of_xpi, "viszot.xpi")
+    # Read addon info:
+    addon_info = get_addon_info(os.path.join(dir_of_xpi, "src", "install.rdf"))
     addon_detailed_info = {"id": addon_info["id"],
                            "syncGUID": "{45d5c74c-465e-9748-abaa-a20704b8a7a8}",
                            "location": "app-profile",
@@ -117,7 +87,7 @@ def modify_extensions_json(path):
                            "updateDate": timestamp_now(),
                            "applyBackgroundUpdates": 1,
                            "bootstrap": False,
-                           "path": path+addon_info["id"]+".xpi",
+                           "path": path_to_extensions_dir+addon_info["id"]+".xpi",
                            "skinnable": False,
                            "size": 1,
                            "sourceURI": "file://"+PATH_TO_XPI,
@@ -150,9 +120,3 @@ def modify_extensions_json(path):
         extjsn["addons"].append(addon_detailed_info)
         with open(PATH_TO_EXTENSIONS_JSON, "w") as fp:
             json.dump(extjsn, fp)
-
-
-if __name__ == "__main__":
-    path = register_in_lz4_and_copy_xpi()
-    modify_extensions_json(path)
-    os.write(1, b"VisZot installed successfully!\n")

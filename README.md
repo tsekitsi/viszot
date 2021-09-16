@@ -13,9 +13,9 @@ You may install the Zotero standalone plugin either manually or programatically 
 **Manual installation**
 In Zotero, go to "Tools -> Add-ons -> Tools for all Add-ons (the small, drop-down wheel in the top right corner) -> Install Add-on From File" and select the file viszot.xpi located in the directory viszot-zotero-plugin. Restart Zotero when prompted.
 
-**Auto installation**
-1. In the terminal, `cd` to the directory `viszot-zotero-plugin/auto-install`.
-2. Run `python install.py` (you might need to install required packages by running `pip install -r requirements.txt` first).
+**Auto installation (useful in development)**
+1. In the terminal, `cd` to the directory `viszot-zotero-plugin`.
+2. Run `python install.py` (you might need to install required packages by running `pip install -r requirements.txt` inside `viszot-zotero-plugin/viszotdev_py_helpers` first).
 
 ### 2) Installing the Google Chrome Extension
 In the Extensions managment view ("chrome://extensions/"), click "Load Unpacked" and select the "viszot-chrome-extension" directory when prompted.
