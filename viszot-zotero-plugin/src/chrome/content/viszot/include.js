@@ -13,7 +13,7 @@ allItemsEndpoint.prototype = {
             outString += ("<div>&#8226; "+item.getField('title', false, true)+"</div>");
         })
         sendResponseCallback(200, "text/html",
-            outString //JSON.stringify(items)
+            new Date() //outString //JSON.stringify(items)
         )
     }
 }

@@ -1,4 +1,4 @@
-from os.path import join, normpath
+from os.path import expanduser, join
 from sys import platform
 from zipfile import ZipFile
 import lz4.block
@@ -41,20 +41,20 @@ DIR_OF_LZ4 = None
 # https://stackoverflow.com/a/8220141:
 if platform == "linux":
     # Linux
-    DIR_OF_LZ4 = join(os.path.expanduser("~"),
+    DIR_OF_LZ4 = join(expanduser("~"),
     			      ".zotero",
     			      "zotero"
     			      )
 elif platform == "darwin":
     # OS X
-    DIR_OF_LZ4 = join(os.path.expanduser("~"),
+    DIR_OF_LZ4 = join(expanduser("~"),
                               "Library",
                               "Application Support",
                               "Zotero"
                               )
 elif platform == "win32":
     # Windows
-    DIR_OF_LZ4 = join(os.path.expanduser("~"),
+    DIR_OF_LZ4 = join(expanduser("~"),
                               "AppData",
                               "Roaming",
                               "Zotero",
@@ -117,10 +117,4 @@ def make_xpi(dir_to_zip, outdir_of_xpi):
                 for file in files:
                     folder = root[len(dir_to_zip):] # path without "parent"
                     for file in files:
-                        zip_obj.write(os.path.join(root, file), os.path.join(folder, file))
-                    '''
-                    #create complete filepath of file in directory
-                    filePath = join(root, filename)
-                    # Add file to zip
-                    zip_obj.write(filePath, normpath(filePath))
-                    '''
+                        zip_obj.write(join(root, file), join(folder, file))
