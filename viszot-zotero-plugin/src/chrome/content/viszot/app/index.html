@@ -1,0 +1,27 @@
+<!--<!DOCTYPE html>-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="myStyle.css" rel="stylesheet" type="text/css"/>
+    <title>VisZot</title>
+</head>
+<body>
+    <button id="butn">Load items...</button>
+    <p>Response:</p>
+    <div style="border-style: solid; border-radius: 5px; border-width: 1px;" id="response"></div>
+    <script>
+        var Zotero = Components.classes["@zotero.org/Zotero;1"]
+            .getService(Components.interfaces.nsISupports)
+            .wrappedJSObject;
+        getAllItems = function() {
+            var items = Zotero.getActiveZoteroPane().getSelectedCollection().getChildItems();
+            var outString = "";
+            items.forEach(function(item) {
+                outString += ("<div>&#8226; "+item.getField('title', false, true)+"</div>");
+            })
+            document.getElementById("response").innerHTML = outString;
+        }
+        document.getElementById("butn").addEventListener("click", getAllItems);
+    </script>
+</body>
+</html>

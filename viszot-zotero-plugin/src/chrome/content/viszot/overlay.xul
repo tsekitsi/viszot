@@ -4,6 +4,11 @@
 
 <overlay id="viszot-overlay"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    
+    <menupopup id="menu_ToolsPopup">
+        <menuitem id="viszot-menuitem" label="VisZot" oncommand="openViszotWindow()"/>
+	</menupopup>
+
     <!--Include the main extension logic:-->
     <script src="chrome://viszot/content/include.js"/>
 </overlay>
