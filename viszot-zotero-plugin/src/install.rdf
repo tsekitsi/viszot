@@ -6,7 +6,7 @@
         <em:id>viszot@iastate.edu</em:id>
         <em:name>VisZot</em:name>
         <em:description>VisZot adds endpoints to the local Zotero server.</em:description>
-        <em:version>1.0.0</em:version>
+        <em:version>1.0.1</em:version>
         <em:creator>Marios Tsekitsidis</em:creator>
         <em:type>2</em:type>
         <em:targetApplication>
