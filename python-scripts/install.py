@@ -3,10 +3,8 @@ from shutil import copyfile
 import json
 
 
-def register_in_lz4_and_copy_xpi(dir_of_xpi):
-    PATH_TO_XPI = join(dir_of_xpi, XPI_FNAME)
-    # Read addon info from the source code:
-    addon_info = get_addon_info(os.path.join(dir_of_xpi, "src", "install.rdf"))
+def register_in_lz4_and_copy_xpi(addon_info, dir_of_xpi):
+    PATH_TO_XPI = join(dir_of_xpi, construct_xpi_filename(addon_info["name"], addon_info["version"]))
     # Initialize dictionary:
     object_out = {}
     out_json_filename = os.path.splitext(os.path.basename(PATH_TO_LZ4))[0]
@@ -60,10 +58,8 @@ def register_in_lz4_and_copy_xpi(dir_of_xpi):
     return path_to_extensions_dir
 
 
-def modify_extensions_json(dir_of_xpi, path_to_extensions_dir):
+def modify_extensions_json(addon_info, dir_of_xpi, path_to_extensions_dir):
     PATH_TO_XPI = join(dir_of_xpi, "viszot.xpi")
-    # Read addon info:
-    addon_info = get_addon_info(os.path.join(dir_of_xpi, "src", "install.rdf"))
     addon_detailed_info = {"id": addon_info["id"],
                            "syncGUID": "{45d5c74c-465e-9748-abaa-a20704b8a7a8}",
                            "location": "app-profile",
@@ -124,8 +120,19 @@ def modify_extensions_json(dir_of_xpi, path_to_extensions_dir):
 
 
 def install_viszot(dir_of_xpi):
-    path = register_in_lz4_and_copy_xpi(dir_of_xpi)
-    modify_extensions_json(dir_of_xpi, path)
+    # Read addon info from the source code:
+    addon_info = get_addon_info(join(dir_of_xpi, "viszot-src", "install.rdf"))
+
+    dir_to_zip = join("..", "viszot-src")
+    path_to_xpi = join("..", construct_xpi_filename(addon_info["name"], addon_info["version"]))
+    # Make xpi:
+    make_xpi(dir_to_zip, path_to_xpi)  # compress current source code to xpi
+    
+    # Continue:
+    path = register_in_lz4_and_copy_xpi(addon_info, dir_of_xpi)
+    modify_extensions_json(addon_info, dir_of_xpi, path)
+    
+    # Announce successful operation:
     os.write(1, b"VisZot installed successfully!\n")
 
 

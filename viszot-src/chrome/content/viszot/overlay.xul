@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay>
+
+<overlay id="viszot-overlay"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">    
+    <menupopup id="menu_ToolsPopup">
+        <menuitem
+            id="viszot-menuitem"
+            label="VisZot"
+            oncommand="window.openDialog('chrome://viszot/content/react-app/build/index.html')"
+        />
+	</menupopup>
+</overlay>

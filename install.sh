@@ -2,7 +2,12 @@
 
 # It works on MacOS 🤷‍♂️
 
-cd python_installer
+# First, build the current version of the react app:
+cd viszot-src/chrome/content/viszot/react-app
+npm run build
+cd ../../../../..
+
+cd python-scripts
 
 # If Zotero is running, kill it.
 ZOTERO_PID=`pgrep -f zotero`  # https://askubuntu.com/a/870231
@@ -28,8 +33,8 @@ $PY_STR -c "from helpers import make_xpi; make_xpi('../src', '..')"
 
 # Handle arguments (aka install/reinstall/uninstall):
 case $MODE in
-    -u) $PY_STR uninstall_viszot.py ;;
-    -r) $PY_STR uninstall_viszot.py; $PY_STR install_viszot.py ;;
+    -u) $PY_STR uninstall.py ;;
+    -r) $PY_STR uninstall.py; $PY_STR install.py ;;
     *) $PY_STR install_viszot.py ;;  # unknown option
 esac
 

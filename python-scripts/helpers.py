@@ -9,9 +9,6 @@ import warnings
 import xml.etree.ElementTree as ET
 
 
-XPI_FNAME = "viszot.xpi"
-
-
 def get_default_from_profiles_ini(filepath_to_profiles_ini):
     with open(filepath_to_profiles_ini, "r") as file_obj:
         default_found = False
@@ -105,16 +102,29 @@ def get_addon_info(path_to_install_rdf):
 
 
 # https://stackoverflow.com/a/42056050
-# Pre-reqs: Assumes that there is no file ../viszot.xpi
-def make_xpi(dir_to_zip, outdir_of_xpi):
+# Pre-reqs: none
+def make_xpi(dir_to_zip, path_to_xpi):
     # https://stackoverflow.com/a/14463362
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         # create a ZipFile object
-        with ZipFile(join(outdir_of_xpi, XPI_FNAME), "w") as zip_obj:
+        with ZipFile(path_to_xpi, "w") as zip_obj:
             # Iterate over all the files in directory
             for root, _, files in os.walk(dir_to_zip):
+                folder = root[len(dir_to_zip):] # path without "parent"
+                try:
+                    if (folder.split(os.sep)[4] == "react-app") and (folder.split(os.sep)[5] != "build"): continue
+                except:  # catching IndexError
+                    pass
                 for file in files:
-                    folder = root[len(dir_to_zip):] # path without "parent"
-                    for file in files:
-                        zip_obj.write(join(root, file), join(folder, file))
+                    zip_obj.write(join(root, file), join(folder, file))
+
+
+def construct_xpi_filename(plugin_name, plugin_version):
+    return "{}-{}.xpi".format(plugin_name, plugin_version)
+
+
+'''
+if __name__ == "__main__":
+    make_xpi(join("..", "viszot-src"), join("..", "temp.xpi"))
+'''
