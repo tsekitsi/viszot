@@ -3,9 +3,9 @@
 # It works on MacOS 🤷‍♂️
 
 # First, build the current version of the react app:
-cd viszot-src/chrome/content/viszot/react-app
-npm run build
-cd ../../../../..
+#cd viszot-src/chrome/content/viszot/react-app
+#npm run build
+#cd ../../../../..
 
 cd python-scripts
 
