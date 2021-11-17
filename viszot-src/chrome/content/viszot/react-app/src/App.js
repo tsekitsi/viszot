@@ -3,11 +3,9 @@ import ForceGraph2D from "react-force-graph-2d";
 import axios from "axios";
 import './App.css';
 
-/*
-const Zotero = Components.classes["@zotero.org/Zotero;1"]
-                .getService(Components.interfaces.nsISupports)
-                .wrappedJSObject;
-*/
+//const Zotero = Components.classes["@zotero.org/Zotero;1"]
+//                .getService(Components.interfaces.nsISupports)
+//                .wrappedJSObject;
 
 const App = () => {  // https://youtu.be/A5KaLpqzRi4
   const [graphData, setGraphData] = useState();
