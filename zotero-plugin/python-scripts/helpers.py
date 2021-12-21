@@ -112,19 +112,9 @@ def make_xpi(dir_to_zip, path_to_xpi):
             # Iterate over all the files in directory
             for root, _, files in os.walk(dir_to_zip):
                 folder = root[len(dir_to_zip):] # path without "parent"
-                try:
-                    if (folder.split(os.sep)[4] == "react-app") and (folder.split(os.sep)[5] != "build"): continue
-                except:  # catching IndexError
-                    pass
                 for file in files:
                     zip_obj.write(join(root, file), join(folder, file))
 
 
 def construct_xpi_filename(plugin_name, plugin_version):
     return "{}-{}.xpi".format(plugin_name, plugin_version)
-
-
-'''
-if __name__ == "__main__":
-    make_xpi(join("..", "viszot-src"), join("..", "temp.xpi"))
-'''

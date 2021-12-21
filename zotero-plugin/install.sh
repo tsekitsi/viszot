@@ -29,9 +29,6 @@ else  # else (if your default python version is >= 3)
     PY_STR="python"
 fi
 
-# Make new xpi (from current source code):
-$PY_STR -c "from helpers import make_xpi; make_xpi('../src', '..')"  ####runas /profile /user:LIBLT-SPCK1\administrator $PY_STR -c "from helpers import make_xpi; make_xpi('../src', '..')"
-
 # Handle arguments (aka install/reinstall/uninstall):
 case $MODE in
     -u) $PY_STR uninstall.py ;;

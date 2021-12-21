@@ -4,7 +4,7 @@ import json
 
 def remove_from_lz4_and_remove_xpi(dir_of_xpi):
     # 1. Read addon info from install.rdf:
-    addon_info = get_addon_info(os.path.join(dir_of_xpi, "viszot-src", "install.rdf"))
+    addon_info = get_addon_info(os.path.join(dir_of_xpi, "src", "install.rdf"))
     # 2. Use addon id to construct (installed) xpi filename:
     INSTALLED_XPI_FNAME = addon_info["id"]+".xpi"
     # 3. Extract .json.lz4 archive to .json file in cwd:
@@ -32,7 +32,7 @@ def remove_from_lz4_and_remove_xpi(dir_of_xpi):
 
 
 def remove_from_extensions_json(dir_of_xpi):
-    my_addon_info = get_addon_info(os.path.join(dir_of_xpi, "viszot-src", "install.rdf"))
+    my_addon_info = get_addon_info(os.path.join(dir_of_xpi, "src", "install.rdf"))
     with open(PATH_TO_EXTENSIONS_JSON) as f:
         extjsn = json.load(f)
         addons_list = extjsn["addons"]
