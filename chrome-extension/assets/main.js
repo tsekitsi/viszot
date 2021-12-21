@@ -1,0 +1,1 @@
+//document.getElementById("butn").addEventListener("click", getAllItems);

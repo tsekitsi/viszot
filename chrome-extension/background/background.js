@@ -1,6 +1,6 @@
 // https://stackoverflow.com/q/5745822
 chrome.runtime.onInstalled.addListener(function (object) {
-    chrome.tabs.create({url: "../index.html"}, function (tab) {
+    chrome.tabs.create({url: "../react-app/build/index.html"}, function (tab) {
         console.log("New tab launched with index.html");
     });
 });
