@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
-import ForceGraph2D from "react-force-graph-2d";
-import axios from "axios";
-import './App.css';
+import React, {useState, useEffect} from 'react'
+import ForceGraph2D from "react-force-graph-2d"
+import axios from 'axios'
+import ItemsList from './components/ItemsList'
+import './components/ItemView.scss'
+import './App.css'
 
-//const Zotero = Components.classes["@zotero.org/Zotero;1"]
-//                .getService(Components.interfaces.nsISupports)
-//                .wrappedJSObject;
+const App = () => {
 
-const App = () => {  // https://youtu.be/A5KaLpqzRi4
+  const [items, setItems] = useState([]);
+  const [seed, setSeed] = useState(null);
   const [graphData, setGraphData] = useState();
 
-  const renderGraph = () => {
+  const renderGraph = (centerItem) => {
     let nodesArr = [];
     let linksArr = [];
-    const seedDOI = "10.1371/journal.ppat.1003608";
+    let ctrDOI = centerItem['DOI'];
     axios
-      .get("https://opencitations.net/index/coci/api/v1/references/"+seedDOI)
+      .get('https://opencitations.net/index/coci/api/v1/references/'+ctrDOI)
       .then(res => {
-        console.log(res);
         for (const dataObj of res.data) {
           nodesArr.push({id: dataObj.cited});
           linksArr.push({source: dataObj.citing, target: dataObj.cited, value:1});
         }
-        nodesArr.push({id: seedDOI});  // add root node
+        nodesArr.push({id: ctrDOI});  // add root node
         setGraphData({
           nodes: nodesArr,
           links: linksArr
@@ -31,32 +31,44 @@ const App = () => {  // https://youtu.be/A5KaLpqzRi4
       .catch(err => {
         console.log(err);
       });
-    console.log(nodesArr, linksArr);
+    console.log(nodesArr);
   };
 
   useEffect(() => {
-    renderGraph()
+    axios.get('/allItems', {  // in production: axios.get('http://localhost:23119/viszot/allItems', {  // axios.get('/allItems', {
+        headers: {'zotero-allowed-request':true}
+    })
+      .then(res => {
+          setItems(res.data)
+      })
+      .catch(err => {
+          console.log(err)
+      })
   }, [])
 
   return(
-    <div className="App">
-      <div> Graph: </div>
-      <div>
-        {
-          graphData ?  // https://stackoverflow.com/a/63281723
-          (
-            <ForceGraph2D
-              graphData={graphData}
-              nodeLabel="id"
-              linkCurvature="curvature"
-              enablePointerInteraction={true}
-              linkDirectionalParticleWidth={1}
-            />
-          ) : <div />
-        }
+    <div className='App'>
+      <div className='ItemListContainer'>
+        <ItemsList items={items} seed={seed} setSeed={setSeed} renderGraph={renderGraph} />
+      </div>
+      <div className='GraphContainer'>
+        <div className='GraphInner'>
+          {(seed === null) ? 'Please select seed paper.' :
+            (
+              <ForceGraph2D
+                graphData={graphData}
+                nodeLabel="id"
+                linkCurvature="curvature"
+                enablePointerInteraction={true}
+                linkDirectionalParticleWidth={1}
+              />
+            )
+          }
+        </div>
       </div>
     </div>
   )
+  
 }
 
 export default App;
