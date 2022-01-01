@@ -19,7 +19,10 @@ const App = () => {
       .get('https://opencitations.net/index/coci/api/v1/references/'+ctrDOI)
       .then(res => {
         for (const dataObj of res.data) {
-          nodesArr.push({id: dataObj.cited});
+          nodesArr.push({
+            id: dataObj.cited,
+            inLib: true
+          });
           linksArr.push({source: dataObj.citing, target: dataObj.cited, value:1});
         }
         nodesArr.push({id: ctrDOI});  // add root node
@@ -57,6 +60,7 @@ const App = () => {
             (
               <ForceGraph2D
                 graphData={graphData}
+                nodeColor={ node => node.inLib ? 'black' : 'red' }
                 nodeLabel="id"
                 linkCurvature="curvature"
                 enablePointerInteraction={true}
