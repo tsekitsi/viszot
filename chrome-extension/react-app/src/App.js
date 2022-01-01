@@ -11,6 +11,13 @@ const App = () => {
   const [seed, setSeed] = useState(null);
   const [graphData, setGraphData] = useState();
 
+  const [displayWidth, setDisplayWidth] = useState(window.innerWidth);
+  const [displayHeight, setDisplayHeight] = useState(window.innerHeight);
+  window.addEventListener('resize', () => {
+    setDisplayWidth(window.innerWidth);
+    setDisplayHeight(window.innerHeight);
+  });  // https://github.com/vasturiano/react-force-graph/issues/233#issuecomment-738778495
+
   const renderGraph = (centerItem) => {
     let nodesArr = [];
     let linksArr = [];
@@ -60,6 +67,8 @@ const App = () => {
             (
               <ForceGraph2D
                 graphData={graphData}
+                width={.7*displayWidth}
+                height={displayHeight}
                 nodeColor={ node => node.inLib ? 'black' : 'red' }
                 nodeLabel="id"
                 linkCurvature="curvature"
