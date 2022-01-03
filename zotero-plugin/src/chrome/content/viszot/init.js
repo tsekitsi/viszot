@@ -19,7 +19,7 @@ addMyPaperEndpoint.prototype = {
     "supportedMethods": ["POST"],
     "supportedDataTypes": ["application/json"],
     /**
-	 * Gets available translator list and other important data
+	 * TO-DO: add description
 	 * @param {Object} postData POST data (expects doi field)
 	 * @param {Function} sendResponseCallback function to send HTTP response
 	 */

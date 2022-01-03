@@ -7,8 +7,16 @@ export default function ItemView({ isSeed, seed, setSeed, item, renderGraph }) {
     return creator['firstName']+' '+creator['lastName']
   }).join(', ');
   const year = item.date;
-  const citedBy = "null";
-  const cites = "null";
+  let citedBy = "null";
+  let cites = "null";
+  try {
+    const cociInfo = JSON.parse(
+                      JSON.parse(
+                        JSON.parse(
+                          item.extra))['coci']);
+    citedBy = cociInfo['incoming_citations_count'];
+    cites = cociInfo['outgoing_citations_count'];
+  } catch (e) {}
   const tagsCount = item.tags.length;
   const tags = item.tags.map(tag => tag.tag).join(', ');
   const abstract = item.abstractNote;
