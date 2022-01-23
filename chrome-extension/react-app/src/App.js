@@ -12,6 +12,7 @@ const App = () => {
   const [seed, setSeed] = useState(null);
   const [graphData, setGraphData] = useState();
 
+  // Deals with setting graph container's dimensions:
   const [displayWidth, setDisplayWidth] = useState(window.innerWidth);
   const [displayHeight, setDisplayHeight] = useState(window.innerHeight);
   window.addEventListener('resize', () => {
@@ -51,17 +52,19 @@ const App = () => {
       extraContents['other'] = item['extra'];  // if not in json, capture old contents in 'other' field
     }
     extraContents['coci'] = info;
-    item.setField('extra', JSON.stringify(extraContents));
+    // TO-DO: write endpoint accepting POST, to write info in items' extra fields:
+    //item.setField('extra', JSON.stringify(extraContents));
   }
 
-  /**
+  /*
    * Ensures each item in `items` with a DOI has COCI info, by
    * selecting the subset that do not have COCI info already, sending
    * a single API request to /metadata/{dois} and calling `setCOCIinfo`
    * on each .
    * @param {Array} items 
    */
-  const ensureItemsHaveCOCIinfo = async items => {
+  /*
+  const ensureItemsHaveCOCIinfo = items => {
     let itemsNeedingCOCIinfoFetching = [];
     items.forEach(item => {
       if (item['DOI']) {  // weed out items without a DOI
@@ -85,6 +88,22 @@ const App = () => {
       })
       .catch(err => console.log(err))
   }
+
+  const fetchMetadataForItems = items => {
+    let itemsNeedingCOCIinfoFetching = [];
+    items.forEach(item => {
+      if (item['DOI']) {  // weed out items without a DOI
+        if (!getCOCIinfo(item)) {  // weed out items that have 
+          itemsNeedingCOCIinfoFetching.push(item);
+        }
+      }
+    })
+    let dois = itemsNeedingCOCIinfoFetching
+      .map(elmt => elmt['DOI'])
+      .join('__')  // prep string for API request
+    return axios.get('https://opencitations.net/index/coci/api/v1/metadata/'+dois)
+  }
+  */
 
   const renderGraph = centerItem => {
     let nodesArr = [];
@@ -113,11 +132,39 @@ const App = () => {
   };
 
   useEffect(() => {
+    //console.log('I am useEffect..!');
+    let tempItems = null;
+    let itemsNeedingCOCIinfoFetching = [];
     axios.get('/allItems', {  // in production: axios.get('http://localhost:23119/viszot/allItems', {  // axios.get('/allItems', {
         headers: {'zotero-allowed-request':true}
     })
       .then(res => {
-        setItems(res.data)
+        tempItems = res.data; //setItems(res.data);
+        tempItems.forEach(item => {
+          if (item['DOI']) {  // weed out items without a DOI
+            if (!getCOCIinfo(item)) {  // weed out items that have 
+              itemsNeedingCOCIinfoFetching.push(item);
+            }
+          }
+        })
+        let dois = itemsNeedingCOCIinfoFetching
+          .map(elmt => elmt['DOI'])
+          .join('__')  // prep string for API request
+        return axios.get('https://opencitations.net/index/coci/api/v1/metadata/'+dois)  // https://stackoverflow.com/a/51850021
+      })
+      .then(itemsMetadata => {
+        let keysOfIncompleteItems = itemsNeedingCOCIinfoFetching.map(item => item.key);
+        tempItems.forEach(item => {
+          let index = keysOfIncompleteItems.findIndex(elmt => (elmt === item.key));
+          if (index !== -1) {
+            setCOCIinfo(JSON.stringify(
+              {incoming_citations_count: itemsMetadata.data[index]['citation_count'],
+              outgoing_citations_count: itemsMetadata.data[index]['reference'].split(';').length,
+              last_updated: moment()
+              }), item)
+          }
+        })
+        setItems(tempItems);
       })
       .catch(err => {
         console.log(err)

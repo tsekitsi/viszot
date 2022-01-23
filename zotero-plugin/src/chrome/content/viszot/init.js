@@ -54,3 +54,14 @@ addMyPaperEndpoint.prototype = {
         //return newItems;
     }
 }
+
+var getItemsByID = Zotero.Server.Endpoints["/viszot/getItemsByID"] = function() {};
+getItemsByID.prototype = {
+    "supportedMethods": ["GET"],
+    "init": function(postData, sendResponseCallback) {
+        let item = Zotero.Items.get("85WB7P48");
+        sendResponseCallback(200, "application/json",
+            JSON.stringify(item)
+        )
+    }
+}
