@@ -33,6 +33,17 @@ This will create the file `VisZot-XXXX.xpi` in the directory `zotero-plugin`, wh
 
 This will increment the version inside `src/install.rdf` if there are uncommitted changes anywhere under `src/chrome`.
 
+**Adding pre-commit hook (optional)**
+
+You may automatically update the Zotero plugin version before committing changes to its source code by adding the following git pre-commit hook:
+
+```
+#!/bin/bash
+
+./zotero-plugin/scripts/darwin/version++.sh zotero-plugin/src
+./zotero-plugin/scripts/darwin/xpify.sh zotero-plugin/src
+```
+
 ### 2) Installing the Google Chrome Extension
 In the Extensions managment view ("chrome://extensions/"), click "Load Unpacked" and select the "viszot-chrome-extension" directory when prompted.
 
