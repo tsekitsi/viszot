@@ -18,9 +18,20 @@ In Zotero, go to "Tools -> Add-ons -> Tools for all Add-ons (the small, drop-dow
 2. Run `python install.py` (you might need to install required packages by running `pip install -r requirements.txt` inside `viszot-zotero-plugin/viszotdev_py_helpers` first).
 
 **How to make addon installation file (xpi) from current source code**
+
 (On Mac) Inside the directory `zotero-plugin`, run
+
 ```./scripts/darwin/xpify.sh src```
+
 This will create the file `VisZot-XXXX.xpi` in the directory `zotero-plugin`, where "XXXX" is the current version. It will overwrite any previous xpi files in the directory. The newly created xpi file can be used to install the addon (plugin) to Zotero.
+
+**How to increment addon version programmatically**
+
+(On Mac) Inside the directory `zotero-plugin`, run
+
+```./scripts/darwin/version++.sh src```
+
+This will increment the version inside `src/install.rdf` if there are uncommitted changes anywhere under `src/chrome`.
 
 ### 2) Installing the Google Chrome Extension
 In the Extensions managment view ("chrome://extensions/"), click "Load Unpacked" and select the "viszot-chrome-extension" directory when prompted.
