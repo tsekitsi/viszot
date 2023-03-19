@@ -3,7 +3,7 @@
 ### Marios Tsekitsidis
 
 Viszot is a "web" application that visualizes your Zotero collections.
-
+<!-- 
 ## Installation
 There are two components to VisZot: (1) a plugin (/"addon") for the Zotero standalone app, and (2) an extension for the Google Chrome browser. Below you will find instructions on how to install each.
 
@@ -51,3 +51,4 @@ In the Extensions managment view ("chrome://extensions/"), click "Load Unpacked"
 - Zotero 5.* Standalone
 - Google Chrome 92.* browser
 - (For auto-installing the Zotero plugin) Python 3
+-->

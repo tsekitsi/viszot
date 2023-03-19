@@ -1,2 +1,0 @@
-content viszot chrome/content/viszot/
-overlay chrome://zotero/content/zoteroPane.xul chrome://viszot/content/overlay.xul
