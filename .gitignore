@@ -4,3 +4,6 @@
 **/.vscode/
 
 **/.env
+**/node_modules/
+
+**/*.sqlite
