@@ -5,29 +5,28 @@ const OAuth = require('oauth-1.0a')
 const sjcl = require('sjcl')
 const DBconn = require('./DBconn')
 
-const MY_ENCR_KEY = process.env.MY_ENCR_KEY
 const OAUTH_KEY = process.env.OAUTH_KEY
 const OAUTH_SECRET = process.env.OAUTH_SECRET
 
 class OAuthClient {
   // Zotero OAuth endpoints:
-  requestTokenEndpoint = 'https://www.zotero.org/oauth/request'
-  authorizeEndpoint = 'https://www.zotero.org/oauth/authorize'
-  accessTokenEndpoint = 'https://www.zotero.org/oauth/access'
+  endpoints = {
+    requestToken: 'https://www.zotero.org/oauth/request',
+    authorize: 'https://www.zotero.org/oauth/authorize',
+    accessToken: 'https://www.zotero.org/oauth/access'
+  }
 
-  callbackUrl = 'https://tseki.ngrok.io/viszot-connect' // redirect to client app.
+  // callbackUrl = 'https://tseki.ngrok.io/viszot-connect' // redirect to client app.
 
-  db = new DBconn() // establish connection to the database.
-
-  constructor(email, clientKey, clientSecret) {
-    this.email = email
+  constructor(db, userId) {
+    this.db = db
 
     this.state = 0 // this.readState() ? this.readState().state : 0
 
     this.oauth = (this.state !== 2) ? OAuth({
       consumer: {
-        key: clientKey,
-        secret: clientSecret
+        key: OAUTH_KEY,
+        secret: OAUTH_SECRET
       },
       signature_method: 'HMAC-SHA1',
       hash_function(base_string, key) {
@@ -35,6 +34,28 @@ class OAuthClient {
       }
     }) : null
   }
+
+  // Request a new request token from the Zotero OAuth server:
+  requestRequestToken = async () => {
+    const tokenRequestConfig = {
+      url: this.endpoints.requestToken,
+      method: 'post'
+    }
+
+    const raw = (await fetch(this.endpoints.requestToken, {
+      headers: this.oauth.toHeader(this.oauth.authorize(tokenRequestConfig)),
+      method: 'post'
+    })).text()
+
+    const params = new URLSearchParams(await raw)
+
+    return Object.fromEntries(params)
+  }
+
+  // Returns the url of the Zotero authorize endpoint with the request token added as a query parameter:
+  makeAuthUrl = (token) => `${this.endpoints.authorize}?oauth_token=${token}`
+
+  /*
 
   // Read OAuth state from db:
   readState = (email) => this.db.filterBy(`email = '${email}'`).then(rows => {
@@ -49,14 +70,11 @@ class OAuthClient {
   // Request a new request token from the Zotero OAuth server:
   requestRequestToken = async () => {
     const tokenRequestConfig = {
-      url: this.requestTokenEndpoint,
-      method: 'post',
-      data: {
-        oauth_callback: this.callbackUrl
-      }
+      url: this.endpoints.requestToken,
+      method: 'post'
     }
 
-    const raw = (await fetch(this.requestTokenEndpoint, {
+    const raw = (await fetch(this.endpoints.requestToken, {
       headers: this.oauth.toHeader(this.oauth.authorize(tokenRequestConfig)),
       method: 'post'
     })).text()
@@ -88,6 +106,9 @@ class OAuthClient {
       return JSON.parse(sjcl.decrypt(MY_ENCR_KEY, encryptedToken))
   }
 
+  // Request a new oauth_verifier from the Zotero OAuth server. Redirects to zotero!
+  urlForRequestingOAuthVerifier = () => `${authorizeEndpoint}?oauth_token=${this.oauthToken}`
+
   // Save access token to the database:
   saveAccessToken = (accessTokenInfo) => {
     // Make sure the access token has all the information we need:
@@ -105,6 +126,10 @@ class OAuthClient {
 
   // Retrieve and decrypt the latest access token for this.email from the database:
   getAccessToken = async () => JSON.parse(sjcl.decrypt(MY_ENCR_KEY, (await this.getAccessTokenEncr())))
+
+  ask = () => null
+
+  */
 }
 
 module.exports = OAuthClient
