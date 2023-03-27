@@ -13,8 +13,8 @@ class DBconn {
 
         const fields = [
           'id integer primary key autoincrement',
-          'oauthState smallint',
-          'tokenSecret text', // request token secret (oauth_token_secret)
+          'requestToken text', // request token (oauth_token)
+          'reqTokenSecret text', // request token secret (oauth_token_secret)
           'accessToken text'
         ]
 
@@ -26,11 +26,11 @@ class DBconn {
     })
   }
 
-  getUser = async (userId) =>
+  getUserBy = async (field, val) =>
     new Promise((resolve, reject) =>
-      this.db.all('select * from users where id = (?)', [userId], (err, rows) => {
+      this.db.all(`select * from users where ${field} = (?)`, [val], (err, rows) => {
         const errMsg = (err) ? err.message :
-          (rows.length < 1) ? `No user with id ${userId} found in the db!` : null;
+          (rows.length < 1) ? `No user with ${field} = "${val}" found in the db!` : null;
         (errMsg) ? reject(new Error(errMsg)) : resolve(rows[0])
       })
     )
@@ -40,36 +40,17 @@ class DBconn {
         (err) ? reject(err) : resolve(`User ${userId}'s "${field}" successfully updated to "${val}"!`)
       })
     )
-
-  getOauthState = async (userId) => (await this.getUser(userId)).oauthState
-  saveOauthState = async (userId, state) => this.setUser(userId, 'oauthState', state)
   
-  getTokenSecret = async (userId) => (await this.getUser(userId)).tokenSecret
-  saveTokenSecret = async (userId, secret) => this.setUser(userId, 'tokenSecret', secret)
+  getUserById = (userId) => this.getUserBy('id', userId)
 
-  getAccessToken = async (userId) => (await this.getUser(userId)).accessToken
+  getReqTokenSecret = async (userId) => (await this.getUserById(userId)).reqTokenSecret
+  saveReqTokenSecret = async (userId, secret) => this.setUser(userId, 'reqTokenSecret', secret)
+
+  getAccessToken = async (userId) => (await this.getUserById(userId)).accessToken
   saveAccessToken = async (userId, token) => this.setUser(userId, 'accessToken', token)
 
-  /*
-  filterBy = async (sqlWhereExpr) => new Promise((resolve, reject) =>
-    this.db.all(`select * from user where ${sqlWhereExpr}`, [], (err, rows) =>
-      err ? reject(err) : resolve(rows)
-    )
-  )
-
-  updateBy = async (sqlWhereExpr, field, value) => new Promise((resolve, reject) =>
-    this.db.run(`update user set ${field} = '${value}' where ${sqlWhereExpr}`, [], (err) =>
-      err ? reject(err) : resolve('Record update successful.')
-    )
-  )
-
-  run = async (sql, params, callback) => new Promise((resolve, reject) =>
-    this.db.run(sql, params, (err) => {
-      callback(err)
-      err ? reject(err) : resolve('Db run successful.')
-    })
-  );
-  */
+  getUserByReqToken = async (token) => this.getUserBy('requestToken', token)
+  saveRequestToken = async (userId, token) => this.setUser(userId, 'requestToken', token)
 }
 
 module.exports = DBconn
