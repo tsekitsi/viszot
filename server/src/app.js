@@ -25,16 +25,16 @@ app.listen(PORT, () => {
 
 const db = new DBconn() // connect to the db.
 
-let oaClient // = new OAuthClient()
-db.getAccessToken(1).then(async (res) => {
-  const { oauth_token, oauth_token_secret, userID, username } = JSON.parse(sjcl.decrypt(KEY, res))
-  // console.log(oauth_token, oauth_token_secret, userID, username)
-  const apiResponse = await api(oauth_token_secret)
-                                                  .library('user', userID)
-                                                  .items()
-                                                  .get({ limit: 10 })
-  console.log(apiResponse)
-})
+// let oaClient // = new OAuthClient()
+// db.getAccessToken(1).then(async (res) => {
+//   const { oauth_token, oauth_token_secret, userID, username } = JSON.parse(sjcl.decrypt(KEY, res))
+//   // console.log(oauth_token, oauth_token_secret, userID, username)
+//   const apiResponse = await api(oauth_token_secret)
+//                                                   .library('user', userID)
+//                                                   .items()
+//                                                   .get({ limit: 10 })
+//   console.log(apiResponse)
+// })
 
 // Root endpoint:
 app.get('/', (req, res) => {
@@ -77,62 +77,6 @@ app.get('/api/connect/:id', async (req, res) => {
     res.status(404).send(err.message)
   }
 })
-
-/*
-app.get('/api/users', (req, res) => {
-  const sql = 'select * from user'
-  const params = []
-  db.all(sql, params, (err, rows) => {
-    if (err) {
-      res.status(400).json({'error': err.message})
-      return
-    }
-    res.json({
-      'message': 'success',
-      'data': rows
-    })
-  })
-})
-
-app.post('/api/user/', (req, res) => { // create a new user
-  let errors=[]
-  if (!req.body.email) {
-    errors.push('No email specified')
-  }
-  if (errors.length) {
-    res.status(400).json({'error': errors.join(',')})
-    return
-  }
-  const data = {
-    email: req.body.email,
-    oauthState: 0
-  }
-  const sql = 'INSERT INTO user (email, oauthState) VALUES (?,?)'
-  const params = [data.email, data.oauthState]
-  db.run(sql, params, (err) => {
-    if (err) {
-      res.status(400).json({'error': err.message})
-      return
-    }
-    res.json({
-      'message': 'success',
-      'data': data,
-      'id' : this.lastID
-    })
-  })
-})
-
-app.put('/api/users/:id', (req, res) => {
-  const userId = req.params.id
-  const userData = req.body
-
-  // Update the user with the given ID using the userData
-  // ...
-
-  // Return a response
-  res.status(200).send(`User with ID ${userId} has been updated`)
-})
-*/
 
 // Default response for any other request:
 app.use((req, res) => {
