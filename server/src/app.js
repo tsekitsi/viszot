@@ -25,7 +25,7 @@ app.listen(PORT, () => {
 
 const db = new DBconn() // connect to the db.
 
-// let oaClient // = new OAuthClient()
+let oaClient // = new OAuthClient()
 // db.getAccessToken(1).then(async (res) => {
 //   const { oauth_token, oauth_token_secret, userID, username } = JSON.parse(sjcl.decrypt(KEY, res))
 //   // console.log(oauth_token, oauth_token_secret, userID, username)
