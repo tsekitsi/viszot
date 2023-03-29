@@ -1,5 +1,5 @@
 require('dotenv').config({ path: `${__dirname}/../.env` });
-const crypto = require('crypto')
+const crypto = require('')
 const fetch = require('node-fetch')
 const OAuth = require('oauth-1.0a')
 const sjcl = require('sjcl')
@@ -20,9 +20,7 @@ class OAuthClient {
     this.db = db
     this.userId = userId
 
-    this.state = 0 // this.readState() ? this.readState().state : 0
-
-    this.oauth = (this.state !== 2) ? OAuth({
+    this.oauth = OAuth({
       consumer: {
         key: OAUTH_KEY,
         secret: OAUTH_SECRET
@@ -31,7 +29,7 @@ class OAuthClient {
       hash_function(base_string, key) {
         return crypto.createHmac('sha1', key).update(base_string).digest('base64')
       }
-    }) : null
+    })
   }
 
   // Request access token from the Zotero OAuth server:
