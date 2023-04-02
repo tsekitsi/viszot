@@ -1,8 +1,8 @@
 services:
   vz-server:
-    build: .
+    build: ./server
     # command: npm start
     ports:
       - 3001:3001
-    # volumes:
-    #   - .:/app
+    volumes:
+      - ./server/src:/server-app/src

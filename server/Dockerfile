@@ -1,6 +1,6 @@
 FROM node:16-alpine
 
-WORKDIR /app
+WORKDIR /server-app
 
 # copy package.json and package-lock.json to the container:
 COPY package*.json ./
