@@ -78,6 +78,16 @@ app.get('/api/connect/:id', async (req, res) => {
   }
 })
 
+app.get('/api/is-connected/:id', async (req, res) => {
+  const userId = req.params.id
+  try {
+    const bool = (await db.getAccessToken(userId)) ? 1 : 0
+    res.status(200).send(`${bool}`)
+  } catch (err) {
+    res.status(404).send(err.message)
+  }
+})
+
 // Default response for any other request:
 app.use((req, res) => {
   res.status(404)
