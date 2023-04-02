@@ -1,5 +1,5 @@
 require('dotenv').config({ path: `${__dirname}/../.env` });
-const crypto = require('')
+const crypto = require('crypto')
 const fetch = require('node-fetch')
 const OAuth = require('oauth-1.0a')
 const sjcl = require('sjcl')
