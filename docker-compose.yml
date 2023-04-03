@@ -6,3 +6,9 @@ services:
       - 3001:3001
     volumes:
       - ./server/src:/server-app/src
+  ngrok:
+    image: ngrok/ngrok:alpine
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTH_TOKEN}
+    command: http --subdomain=tseki 3001
+    network_mode: "host"
