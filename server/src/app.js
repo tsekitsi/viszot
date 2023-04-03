@@ -48,7 +48,7 @@ app.get('/api/viszot-connect', async (req, res) => {
     const userId = (await db.getUserByReqToken(oauth_token)).id
     res.redirect(`/api/connect/${userId}?oauth_token=${oauth_token}&oauth_verifier=${oauth_verifier}`)
   } catch (err) {
-    res.status(404).send(err.message)
+    res.status(500).send(err.message)
   }
 })
 
@@ -74,7 +74,7 @@ app.get('/api/connect/:id', async (req, res) => {
       //
     }*/
   } catch (err) {
-    res.status(404).send(err.message)
+    res.status(500).send(err.message)
   }
 })
 
@@ -84,7 +84,7 @@ app.get('/api/is-connected/:id', async (req, res) => {
     const bool = (await db.getAccessToken(userId)) ? 1 : 0
     res.status(200).send(`${bool}`)
   } catch (err) {
-    res.status(404).send(err.message)
+    res.status(500).send(err.message)
   }
 })
 
