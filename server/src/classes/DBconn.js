@@ -51,6 +51,14 @@ class DBconn {
 
   getUserByReqToken = async (token) => this.getUserBy('requestToken', token)
   saveRequestToken = async (userId, token) => this.setUser(userId, 'requestToken', token)
+
+  initUser = async () =>
+    new Promise((resolve, reject) =>
+      this.db.run('insert into users default values', function (err) {
+        //^ have to use old-school "function", according to https://github.com/TryGhost/node-sqlite3/wiki/API.
+        return (err) ? reject(err) : resolve(this.lastID)
+      })
+    )
 }
 
 module.exports = DBconn
