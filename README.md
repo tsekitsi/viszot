@@ -28,7 +28,7 @@ Firstly, my selected programming language for the logic in both the front-end an
 
 ### 2.2 Containerization
 
-To help manage the different application components during development, as well in preparation for deployment, I use the containerization platform Docker. Containerization is the process of packaging an application's code with all its dependencies (files, libraries, etc.) in an isolated software environment (container) so that it runs on any infrastructure. My top-level container, "viszot", contains three services ("sub"-containers): "vz-server", "ngrok" and "vz-front". Naturally, "vz-server" includes the server code and the database file, while "vz-front" includes the user interface code.
+To help manage the different application components during development, as well in preparation for deployment, I use the containerization platform Docker. Containerization is the process of packaging an application's code with all its dependencies (files, libraries, etc.) in an isolated software environment (container) so that it runs on any infrastructure. My top-level container, "viszot", contains three services ("sub-containers"): "vz-server", "ngrok" and "vz-front". Naturally, "vz-server" includes the server code and the database file, while "vz-front" includes the user interface code.
 
 ### 2.3 HTTP Tunneling
 
@@ -36,7 +36,9 @@ The service "ngrok" runs an instance of the application ngrok. Ngrok is a tool t
 
 ## 3 Application Architecture
 
-...
+### 3.1 VisZot server: an OAuth client (!)
+
+
 
 <!-- 
 
