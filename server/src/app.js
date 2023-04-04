@@ -1,5 +1,6 @@
 require('dotenv').config()
 const bodyParser = require('body-parser')
+const cors = require('cors');
 const express = require('express')
 const sjcl = require('sjcl')
 const DBconn = require('./classes/DBconn')
@@ -14,6 +15,9 @@ const app = express()
 // Create application/x-www-form-urlencoded parser & application/json parser:
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cors({
+  origin: '*'
+}))
 
 // Server port:
 const PORT = 3001
