@@ -36,9 +36,25 @@ The service "ngrok" runs an instance of the application ngrok. Ngrok is a tool t
 
 ## 3 Application Architecture
 
-### 3.1 VisZot server: an OAuth client (!)
+### 3.1 VisZot server: a client (!) for Zotero OAuth
 
+As mentioned, VisZot reads and writes from/to the user's Zotero collections. To interact with the Zotero API on behalf of the user, we need an API key that grants us the appropriate permissions. We can acquire an API key through an OAuth exchange with the Zotero server.
 
+**OAuth** — is a protocol that allows secure authorization, i.e. a user granting access to their resources stored on one site (e.g. collections of citations in Zotero) to another site (e.g. VisZot) without sharing their credentials, such as username and password. In OAuth, there are three parties involved: the user, the resource owner (e.g. Zotero; who owns the resource that the user wants to access), and the client (e.g. VisZot; the third-party application that wants to access the resource on behalf of the user). The user authorizes the client to access the resource, and the client obtains an access token from the authorization server. The access token is then used to access the resource on behalf of the user.
+
+![OAuth Workflow](assets/oauth-workflow.png)
+
+Below are the steps of the OAuth flow between VisZot and Zotero:
+
+1. Starting in the front-end on the screen to link your Zotero account, the user submits a request to the endpoint "/api/connect/:id" on the VisZot server.
+2. Assuming that this is the user’s first-time use, there is no API key (access token) associated with them in the database yet. Therefore, we initiate the process of acquiring a new access token.
+   We make a request to the endpoint “/oauth/request” on the Zotero API server and we receive back a "request" token: an object with two values, "oauth_token" and "oauth_token_secret". Note: from here on, we may refer to this "oauth_token" as the request token, and to "oauth_token_secret" as the request token secret.
+3. On the VisZot server, upon receiving the response from "/oauth/request", we save the request token in the field "requestToken" for the user. Also, we encrypt the request token secret and store the encrypted value in "reqTokenSecret".
+4. Having gotten a request token, we redirect the user to Zotero (specifically, the "/oauth/authorize" endpoint) to log in with their Zotero credentials and approve our authorization request. Note: the request token is sent along in the redirect.
+5. When we registered our app with Zotero, we listed a callback URL. This is the URL to which Zotero forwards data after the user grants us authorization. The forwarded data includes the request token, plus a new key, "oauth_verifier". We receive these in our endpoint: "/api/viszot-connect". Upon receiving a request, this endpoint retrieves the user's id from the database by querying by the request token.
+6. Having recovered the user id, we forward the request token and the oauth_verifier to the "/api/connect/:id" endpoint.
+7. Since this request provides an "oauth_verifier", we handle it differently: we request an access token from the Zotero OAuth Server, providing the request token, the request token secret and the oauth_verifier.
+8. We receive back an object with an access token & access token secret, the user’s Zotero user id and the user's Zotero username. We encrypt this information and store it in the database in the accessToken field for the user. The access token secret is the Zotero Web API key. We use it to interact with the Zotero API on behalf of the user.
 
 <!-- 
 
