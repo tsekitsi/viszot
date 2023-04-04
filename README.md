@@ -1,9 +1,19 @@
 # VisZot: Visualize your Zotero collections
 
-### Marios Tsekitsidis
+## 1 Introduction
 
-Viszot is a "web" application that visualizes your Zotero collections.
+### 1.1 Motivation
+
+Citation management software is valuable to researchers, allowing them to import references<!--from various sources such as library catalogs, databases, and web pages-->, group them together, annotate them and create bibliographies in various styles. While such features are useful in organizing <!--(synonym: cataloging)--> literature, they fall short of evolving <!--(synonym: enhancing)--> the researcher's understanding of a domain. <!--(keywords: "the-use-of-mapping-in-literature-review", "knowledge synthesis", "mapping review")--> For example, drawing relationships between citations in one's catalog, like paper A "extends"/"contradicts" paper B, can help identify overlaps and gaps in the literature, and highlight areas where more research is needed.
+
+### 1.2 Contribution
+
+In this project I develop a web application, VisZot, that extends the citation management software Zotero. VisZot allows users to define and visualize relationships between citations (e.g. A cites B).
+
+
+
 <!-- 
+
 ## Installation
 There are two components to VisZot: (1) a plugin (/"addon") for the Zotero standalone app, and (2) an extension for the Google Chrome browser. Below you will find instructions on how to install each.
 
