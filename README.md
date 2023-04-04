@@ -26,6 +26,18 @@ Firstly, my selected programming language for the logic in both the front-end an
 - **Server:**  Express — a minimal web application framework for building RESTful APIs (stateless, separate from client, etc.) for Node.js, whose flexibility makes it ideal for a wide range of projects, including single-page applications.
 - **Database:** Sqlite — a widely used library that provides a relational database management system (RDBMS) with a file-based database that can be used without a separate server process, offerring efficiency, reliability, and portability.
 
+### 2.2 Containerization
+
+To help manage the different application components during development, as well in preparation for deployment, I use the containerization platform Docker. Containerization is the process of packaging an application's code with all its dependencies (files, libraries, etc.) in an isolated software environment (container) so that it runs on any infrastructure. My top-level container, "viszot", contains three services ("sub"-containers): "vz-server", "ngrok" and "vz-front". Naturally, "vz-server" includes the server code and the database file, while "vz-front" includes the user interface code.
+
+### 2.3 HTTP Tunneling
+
+The service "ngrok" runs an instance of the application ngrok. Ngrok is a tool that allows the developer to expose a web server running on their local machine to the Internet via a secure tunnel. By exposing the port that the VisZot server listens on, we allow the Zotero OAuth server to redirect to VisZot, after the user gives us authorization to interact with their Zotero library on their behalf (see section 3 for more details). <!--For the full, containerized application to function properly, all three services must be running.-->
+
+## 3 Application Architecture
+
+...
+
 <!-- 
 
 ## Installation
