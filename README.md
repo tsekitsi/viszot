@@ -10,6 +10,10 @@ Citation management software is valuable to researchers, allowing them to import
 
 In this project I develop a web application, VisZot, that extends the citation management software Zotero. VisZot allows users to define and visualize relationships between citations in their Zotero library (e.g. A cites B). All data created in VisZot gets stored with the citations in Zotero using the Zotero API. Therefore, a user's VisZot data and Zotero library are fundamentally synchronized.
 
+### 1.3 Overview
+
+In this document I provide a description of the development enviroment, an explanation of the application's architecture, a discussion of features and limitations and an outline of future improvements.
+
 
 
 <!-- 
