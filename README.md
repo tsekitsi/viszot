@@ -14,7 +14,17 @@ In this project I develop a web application, VisZot, that extends the citation m
 
 In this document I provide a description of the development enviroment, an explanation of the application's architecture, a discussion of features and limitations and an outline of future improvements.
 
+## 2 The Development Environment
 
+This is a full-stack web development project, meaning it requires the development of both front-end and back-end components of a web application: the user interface (UI), the server-side logic, and a database.
+
+### 2.1 Selected Tools
+
+Firstly, my selected programming language for the logic in both the front-end and back-end components is JavaScript and both components are built for the Node.js runtime environment. Furthermore, here is a list of tools I use in developing the three parts of the application:
+
+- **User interface:** React — a popular application framework that allows the developer to create reusable UI components and manages their state efficiently, making it easy to build complex, interactive applications.
+- **Server:**  Express — a minimal web application framework for building RESTful APIs (stateless, separate from client, etc.) for Node.js, whose flexibility makes it ideal for a wide range of projects, including single-page applications.
+- **Database:** Sqlite —a widely used library that provides a relational database management system (RDBMS) with a file-based database that can be used without a separate server process, offerring efficiency, reliability, and portability.
 
 <!-- 
 
