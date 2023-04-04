@@ -29,9 +29,18 @@ function App() {
 
   return (
     <div className="App">
-      <form action="http://localhost:3001/api/connect/1">
-        <button className="button">Connect to Zotero!</button>
-      </form>
+      { 
+        (oauthd) ?
+        (
+          <p>Will load the main app.</p>
+        ) :
+        (
+          <form action="http://localhost:3001/api/connect/1">
+            <button className="button">Connect to Zotero!</button>
+          </form>
+        )
+      }
+      
     </div>
   );
 }
