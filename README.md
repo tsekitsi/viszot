@@ -24,7 +24,7 @@ Firstly, my selected programming language for the logic in both the front-end an
 
 - **User interface:** React — a popular application framework that allows the developer to create reusable UI components and manages their state efficiently, making it easy to build complex, interactive applications.
 - **Server:**  Express — a minimal web application framework for building RESTful APIs (stateless, separate from client, etc.) for Node.js, whose flexibility makes it ideal for a wide range of projects, including single-page applications.
-- **Database:** Sqlite —a widely used library that provides a relational database management system (RDBMS) with a file-based database that can be used without a separate server process, offerring efficiency, reliability, and portability.
+- **Database:** Sqlite — a widely used library that provides a relational database management system (RDBMS) with a file-based database that can be used without a separate server process, offerring efficiency, reliability, and portability.
 
 <!-- 
 
