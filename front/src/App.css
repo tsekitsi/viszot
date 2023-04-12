@@ -1,3 +1,171 @@
+body {
+  margin: 0;
+}
+
+.App {
+  display: flex;
+}
+
+#main-app {
+  display: flex;
+  flex-direction: row;
+}
+
+#left-container {
+  display: flex;
+  flex-direction: column;
+
+  width: 33vw;
+  height: 100vh;
+}
+
+#right-container {
+  display: flex;
+  flex-direction: column;
+
+  width: 67vw;
+  height: 100vh;
+}
+
+#topbar-container {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  height: 17vh;
+}
+
+#viewer-container {
+  display: flex;
+
+  width: 100%;
+  height: 66vh;
+
+  background-color: aquamarine;
+}
+
+#bottombar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /*width: 100%;*/
+  height: 17vh;
+}
+
+#collection-display-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 100%;
+  height: 17vh;
+}
+
+#list-display-container {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 83vh;
+}
+
+#source-display-container {
+  display: flex;
+  flex-direction: column;
+
+  width: 33vw;
+}
+
+#relation-display-container {
+  display: flex;
+  flex-direction: column;
+
+  width: 33vw;
+}
+
+#target-display-container {
+  display: flex;
+  flex-direction: column;
+
+  width: 33vw;
+}
+
+#draw-display-container {
+  display: flex;
+}
+
+#collection-display-label-container {
+  display: flex;
+}
+
+#collection-display-selector-container {
+  display: flex;
+}
+
+.source-target-display-label-container {
+  display: flex;
+}
+
+.source-target-display-shortitemview-container {
+  display: flex;
+}
+
+#relation-display-label-container {
+  display: flex;
+}
+
+#relation-display-selector-container {
+  display: flex;
+}
+
+.dropdown, .dropdown-menu {
+  width: 100%;
+}
+.dropdown-trigger, .dropdown-trigger button {
+  display: flex;
+  justify-content: space-between;
+
+  width: 100%;
+} /* https://stackoverflow.com/a/59250174 */
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.horiz-space-betw {
+  justify-content: space-between;
+}
+
+.vertical-center {
+  align-items: center;
+}
+
+#list-display-itemslist-container {
+  height: 95%;
+}
+
+.blah-blah {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.align-start {
+  align-items: start;
+}
+
+.justify-left {
+  justify-content: left;
+}
+
+/*
 .App {
   text-align: center;
 }
@@ -36,3 +204,4 @@
     transform: rotate(360deg);
   }
 }
+*/

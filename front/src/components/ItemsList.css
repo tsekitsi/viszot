@@ -1,0 +1,16 @@
+#itemslist { /* following bulma button CSS */
+  width: 100%;
+  height: 100%;
+
+  border: 1px solid;
+  border-color: #dbdbdb;
+  border-radius: 4px;
+
+  overflow: scroll;
+}
+
+#itemslist ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
