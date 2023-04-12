@@ -4,7 +4,9 @@ import './App.css'
 import { useState, useEffect } from 'react'
 import CollectionSelector from './components/CollectionSelector'
 import RelationSelector from './components/RelationSelector'
-import ItemsList from './components/ItemsList'
+import ItemList from './components/ItemList'
+import ShortItemLi from './components/ShortItemLi'
+import fetchCollection from './api'
 
 function App() {
   const apiBaseUrl = 'http://localhost:3001'
@@ -12,6 +14,8 @@ function App() {
   const [userId, setUserId] = useState(localStorage.getItem('vzUserId'))
   const [newUserReqd, setNewUserReqd] = useState(false)
   const [oauthd, setOauthd] = useState(false)
+  
+  const [sourceItem, setSourceItem] = useState(null)
 
   // This will run when the app renders for the first time:
   useEffect(() => {
@@ -30,7 +34,7 @@ function App() {
           setNewUserReqd(true) // prevent more requests to create new user.
         });
     }
-  })
+  }, [])
 
   const mockData = {
     collections: [
@@ -75,7 +79,11 @@ function App() {
                     <p>Items</p>
                   </div>
                   <div id="list-display-itemslist-container">
-                    <ItemsList items={mockData.items} />
+                    <ItemList
+                      currentSource={sourceItem}
+                      toggleCurrentSource={setSourceItem}
+                      items={mockData.items}
+                    />
                   </div>
                 </div>
               </div>
@@ -86,7 +94,7 @@ function App() {
                       <p>Source</p>
                     </div>
                     <div id="source-display-shortitemview-container">
-                      short item view...
+                      {/*<ShortItemLi item={sourceItem}/>*/}
                     </div>
                   </div>
                   <div id="relation-display-container" className="p-3">

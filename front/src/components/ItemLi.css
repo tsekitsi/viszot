@@ -5,3 +5,13 @@
   height: 4rem;
   justify-content: space-between;
 }
+
+.li-actions {
+  gap: 0.5rem;
+}
+
+.li-actions button {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+}
