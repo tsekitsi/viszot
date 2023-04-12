@@ -6,7 +6,7 @@ import CollectionSelector from './components/CollectionSelector'
 import RelationSelector from './components/RelationSelector'
 import ItemList from './components/ItemList'
 import ItemShort from './components/ItemShort'
-import fetchCollection from './api'
+import fetchCollectionItems from './api'
 
 function App() {
   const apiBaseUrl = 'http://localhost:3001'
@@ -15,6 +15,7 @@ function App() {
   const [newUserReqd, setNewUserReqd] = useState(false)
   const [oauthd, setOauthd] = useState(false)
   
+  const [activeCollection, setActiveCollection] = useState(null)
   // const [sourceItem, setSourceItem] = useState(null)
 
   // This will run when the app renders for the first time:
@@ -100,7 +101,8 @@ function App() {
 
   const handleCollectionSelect = (selectedCollection) => {
     // When the user selects a collection, we fetch that collection's items.
-    console.log(`The user selected the collection: ${selectedCollection.data.name}`)
+    setActiveCollection(selectedCollection)
+    // console.log(`The user selected the collection: ${selectedCollection.data.name}`)
   }
 
   return (
@@ -129,7 +131,7 @@ function App() {
                     <ItemList
                       /*currentSource={sourceItem}
                       toggleCurrentSource={setSourceItem}*/
-                      collection={mockData.collections[1]}
+                      collection={activeCollection}
                     />
                   </div>
                 </div>

@@ -2,8 +2,8 @@ import axios from 'axios'
 
 const baseUrl = 'http://localhost:3001'
 
-const fetchCollection = async (userId, collectionKey) => {
-  const response = axios.get(`${baseUrl}/api/get-collection`, {
+const fetchCollectionItems = async (userId, collectionKey) => {
+  const response = axios.get(`${baseUrl}/api/get-collection-items`, {
     params: {
       userId: userId,
       collectionKey: collectionKey
@@ -13,4 +13,4 @@ const fetchCollection = async (userId, collectionKey) => {
   return response // response.data. ...
 }
 
-export default fetchCollection
+export default fetchCollectionItems
