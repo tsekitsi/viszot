@@ -1,4 +1,4 @@
-const ShortItemLi = ({ item }) => {
+const ItemShort = ({ item }) => {
   if (item) {
     return (
       <div className='blah-blah btn-like flex-row align-ctr'>
@@ -19,4 +19,4 @@ const ShortItemLi = ({ item }) => {
   
 }
 
-export default ShortItemLi
+export default ItemShort

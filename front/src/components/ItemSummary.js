@@ -1,4 +1,4 @@
-import './ItemLi.css'
+import './ItemSummary.css'
 
 import fontawesome from '@fortawesome/fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,7 +6,7 @@ import { faRightFromBracket, faBullseye } from '@fortawesome/free-solid-svg-icon
 
 fontawesome.library.add(faRightFromBracket, faBullseye)
 
-const ItemLi = ({ currentSource, toggleCurrentSource, item }) => {
+const ItemSummary = ({ currentSource, toggleCurrentSource, item }) => {
   let colorStyles = {}
   if (currentSource) {
     if (currentSource.key == item.key) {
@@ -41,4 +41,4 @@ const ItemLi = ({ currentSource, toggleCurrentSource, item }) => {
   )
 }
 
-export default ItemLi
+export default ItemSummary

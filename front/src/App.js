@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import CollectionSelector from './components/CollectionSelector'
 import RelationSelector from './components/RelationSelector'
 import ItemList from './components/ItemList'
-import ShortItemLi from './components/ShortItemLi'
+import ItemShort from './components/ItemShort'
 import fetchCollection from './api'
 
 function App() {
@@ -94,7 +94,7 @@ function App() {
                       <p>Source</p>
                     </div>
                     <div id="source-display-shortitemview-container">
-                      {/*<ShortItemLi item={sourceItem}/>*/}
+                      {/*<ItemShort item={sourceItem}/>*/}
                     </div>
                   </div>
                   <div id="relation-display-container" className="p-3">

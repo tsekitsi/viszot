@@ -1,10 +1,10 @@
 import './ItemList.css'
 
-import ItemLi from './ItemLi'
+import ItemSummary from './ItemSummary'
 
 const itemList = ({ currentSource, toggleCurrentSource, items }) => {
   const listItems = items.map((item) => 
-    <ItemLi
+    <ItemSummary
       key={item.key}
       item={item}
       currentSource={currentSource}
@@ -13,7 +13,7 @@ const itemList = ({ currentSource, toggleCurrentSource, items }) => {
   )
 
   return (
-    <div id="itemlist" className="p-1">
+    <div id="itemslist" className="p-1">
       <ul>
         { listItems }
       </ul>
