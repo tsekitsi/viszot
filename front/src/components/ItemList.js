@@ -1,12 +1,20 @@
 import './ItemList.css'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ItemSummary from './ItemSummary'
 
 const ItemList = ({ /*currentSource, toggleCurrentSource,*/ collection }) => {
+
   const [items, setItems] = useState([])
   const [sourceItem, setSourceItem] = useState(null)
   const [targetItem, setTargetItem] = useState(null)
+
+  
+
+  /*
+  if (collection)
+    console.log(`I'm being asked to fetch the items of collection "${collection.data.name}"!`)
+  */
   
   const listItems = items.map((item) => 
     <ItemSummary
