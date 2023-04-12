@@ -6,24 +6,29 @@ import CollectionSelector from './components/CollectionSelector'
 import RelationSelector from './components/RelationSelector'
 import ItemList from './components/ItemList'
 import ItemShort from './components/ItemShort'
-import fetchCollectionItems from './api'
+import { fetchCollections, fetchCollectionItems } from './api'
 
 function App() {
   const apiBaseUrl = 'http://localhost:3001'
 
-  const [userId, setUserId] = useState(localStorage.getItem('vzUserId'))
-  const [newUserReqd, setNewUserReqd] = useState(false)
   const [oauthd, setOauthd] = useState(false)
-  
+  const [collections, setCollections] = useState([])
   const [activeCollection, setActiveCollection] = useState(null)
+  const [items, setItems] = useState([])
   // const [sourceItem, setSourceItem] = useState(null)
+
+  const userId = localStorage.getItem('vzUserId')
+  let newUserReqd = false
 
   // This will run when the app renders for the first time:
   useEffect(() => {
     if (userId) { // if a cached user ID exists in localStorage..
+      setOauthd(true) // temporary!
+      /*
       fetch(`${apiBaseUrl}/api/is-connected/${userId}`) // check if we have a key for them.
         .then(response => response.text())
         .then(data => setOauthd(parseInt(data)))
+      */
     } else if (!newUserReqd) { // else, as long as we haven't already req'd a new user created..
       // Create a new user in the DB:
       fetch(`${apiBaseUrl}/api/init-user`, { method: 'post' })
@@ -31,11 +36,26 @@ function App() {
         .then(data => {
           const createdId = parseInt(data)
           localStorage.setItem('vzUserId', createdId); // save the new user ID to localStorage.
-          setUserId(createdId) // save user ID in piece of state.
-          setNewUserReqd(true) // prevent more requests to create new user.
+          newUserReqd = true // prevent more requests to create new user.
         });
     }
   }, [])
+
+  // This will run when the "userId" piece of state gets updated:
+  useEffect(() => {
+    fetchCollections(userId).then((res) => {
+      console.log('Im gonna fetch this users collections...!')
+      setCollections(res)
+    })
+  }, [oauthd])
+
+  // This will run when the "activeCollection" piece of state gets updated:
+  useEffect(() => {
+    if (activeCollection) // if not null..
+      fetchCollectionItems(userId, activeCollection.key).then((res) => {
+        setItems(res)
+      })
+  }, [activeCollection])
 
   const mockCollections = [
     {
@@ -118,7 +138,7 @@ function App() {
                   </div>
                   <div id="collection-display-selector-container">
                     <CollectionSelector
-                      collections={mockCollections}
+                      collections={collections}
                       onCollectionSelect={handleCollectionSelect}
                     />
                   </div>
@@ -131,7 +151,7 @@ function App() {
                     <ItemList
                       /*currentSource={sourceItem}
                       toggleCurrentSource={setSourceItem}*/
-                      collection={activeCollection}
+                      items={items}
                     />
                   </div>
                 </div>
