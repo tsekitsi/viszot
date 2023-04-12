@@ -36,6 +36,45 @@ function App() {
     }
   }, [])
 
+  const mockCollections = [
+    {
+        "key": "TJSB7TNF",
+        "version": 401,
+        "library": {
+            "type": "user",
+            "id": 7809590,
+            "name": "marios1",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/marios1",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/users/7809590/collections/TJSB7TNF",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/marios1/collections/TJSB7TNF",
+                "type": "text/html"
+            }
+        },
+        "meta": {
+            "numCollections": 0,
+            "numItems": 9
+        },
+        "data": {
+            "key": "TJSB7TNF",
+            "version": 401,
+            "name": "Sample Collection #1",
+            "parentCollection": false,
+            "relations": {}
+        }
+    }
+]
+
   const mockData = {
     collections: [
       { key: 'P9WXVCSP', data: { name: '453-project' } },
@@ -59,6 +98,11 @@ function App() {
     target: null
   }
 
+  const handleCollectionSelect = (selectedCollection) => {
+    // When the user selects a collection, we fetch that collection's items.
+    console.log(`The user selected the collection: ${selectedCollection.data.name}`)
+  }
+
   return (
     <div className="App">
       {
@@ -71,7 +115,10 @@ function App() {
                     <p>Collection</p>
                   </div>
                   <div id="collection-display-selector-container">
-                    <CollectionSelector items={mockData.collections} />
+                    <CollectionSelector
+                      collections={mockCollections}
+                      onCollectionSelect={handleCollectionSelect}
+                    />
                   </div>
                 </div>
                 <div id="list-display-container" className="p-3">

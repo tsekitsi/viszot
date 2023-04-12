@@ -7,9 +7,9 @@ import { useState } from 'react'
 
 fontawesome.library.add(faAngleDown)
 
-const CollectionSelector = ({ items }) => {
-  const [selectedItem, setSelectedItem] = useState({data: {name: 'Select a collection...'}})
-  const [lastSelectedItemElement, setLSIE] = useState(null)
+const CollectionSelector = ({ collections, onCollectionSelect }) => {
+  const [selectedCollection, setSelectedCollection] = useState({data: {name: 'Select a collection...'}})
+  const [lastSelectedCollectionElement, setLSIE] = useState(null)
 
   const getTheDropDownElmtFromDescendant = (descendantElmt) => {
     let theDropDownElmt = null
@@ -39,26 +39,29 @@ const CollectionSelector = ({ items }) => {
     //console.log(event.target)
   }
 
-  const handleItemClick = (event, clickedItem) => {
+  const handleCollectionClick = (event, clickedCollection) => {
     event.preventDefault()
 
-    // Update everything re last selected item:
-    if (lastSelectedItemElement) lastSelectedItemElement.classList.remove('is-active')
+    // Send selected Collection up to the App component:
+    onCollectionSelect(clickedCollection)
+
+    // Update everything re last selected collection:
+    if (lastSelectedCollectionElement) lastSelectedCollectionElement.classList.remove('is-active')
     event.target.classList.add('is-active')
-    setLSIE(event.target) // update last Selected Item Element
+    setLSIE(event.target) // update last Selected Collection Element
     
     // Update state:
-    setSelectedItem(clickedItem)
+    setSelectedCollection(clickedCollection)
   }
 
-  const listItems = items.map((item) =>
+  const listCollections = collections.map((collection) =>
     <a
-      key={item.key}
+      key={collection.key}
       href='#'
-      onClick={(event) => handleItemClick(event, item)}
+      onClick={(event) => handleCollectionClick(event, collection)}
       className='dropdown-item'
     >
-      {item.data.name}
+      {collection.data.name}
     </a>
   )
 
@@ -66,7 +69,7 @@ const CollectionSelector = ({ items }) => {
     <div className="dropdown"> {/*is-active*/}
       <div className="dropdown-trigger">
         <button onClick={toggleDropDownDisplay} className="button" aria-haspopup="true" aria-controls="collections-dropdown-menu">
-          <span>{selectedItem.data.name}</span>
+          <span>{selectedCollection.data.name}</span>
           <span className="icon is-small">
             <FontAwesomeIcon icon="fa-solid fa-angle-down" />
           </span>
@@ -75,7 +78,7 @@ const CollectionSelector = ({ items }) => {
       <div className="dropdown-menu" id="collections-dropdown-menu" role="menu">
         <div className="dropdown-content">
           { // 
-            listItems
+            listCollections
           }
           {/*
           <a href='#' className="dropdown-item is-active">
