@@ -15,7 +15,11 @@ function App() {
   const [collections, setCollections] = useState([])
   const [activeCollection, setActiveCollection] = useState(null)
   const [items, setItems] = useState([])
-  // const [sourceItem, setSourceItem] = useState(null)
+  const [sourceItem, setSourceItem] = useState(null)
+  const [targetItem, setTargetItem] = useState(null)
+  const [relations, setRelations] = useState([])
+  const [activeRelation, setActiveRelation] = useState(null)
+  const [canDraw, setCanDraw] = useState(false)
 
   const userId = localStorage.getItem('vzUserId')
   let newUserReqd = false
@@ -44,7 +48,6 @@ function App() {
   // This will run when the "userId" piece of state gets updated:
   useEffect(() => {
     fetchCollections(userId).then((res) => {
-      console.log('Im gonna fetch this users collections...!')
       setCollections(res)
     })
   }, [oauthd])
@@ -57,6 +60,7 @@ function App() {
       })
   }, [activeCollection])
 
+  /*
   const mockCollections = [
     {
         "key": "TJSB7TNF",
@@ -118,11 +122,27 @@ function App() {
     relations: ['cites', 'extends', 'contradicts'],
     target: null
   }
+  */
 
   const handleCollectionSelect = (selectedCollection) => {
-    // When the user selects a collection, we fetch that collection's items.
+    // When the user selects a collection, we update the activeCollection & relations pieces of state
+    //     and reset the sourceItem, targetItem, activeRelation, and canDraw pieces of state:
     setActiveCollection(selectedCollection)
-    // console.log(`The user selected the collection: ${selectedCollection.data.name}`)
+    // TO-DO!
+    setSourceItem(null)
+    setTargetItem(null)
+    setActiveRelation(null)
+    setCanDraw(false)
+  }
+
+  const handleChooseSource = (chosenSource) => {
+    setSourceItem(chosenSource)
+    setCanDraw(true && targetItem)
+  }
+
+  const handleChooseTarget = (chosenTarget) => {
+    setTargetItem(chosenTarget)
+    setCanDraw(true && sourceItem)
   }
 
   return (
@@ -138,7 +158,7 @@ function App() {
                   </div>
                   <div id="collection-display-selector-container">
                     <CollectionSelector
-                      collections={collections}
+                      collections={collections}//{mockCollections}//
                       onCollectionSelect={handleCollectionSelect}
                     />
                   </div>
@@ -149,9 +169,11 @@ function App() {
                   </div>
                   <div id="list-display-itemslist-container">
                     <ItemList
-                      /*currentSource={sourceItem}
-                      toggleCurrentSource={setSourceItem}*/
-                      items={items}
+                      items={items}//{mockData.items}//
+                      source={sourceItem}
+                      target={targetItem}
+                      onChooseSource={handleChooseSource}
+                      onChooseTarget={handleChooseTarget}
                     />
                   </div>
                 </div>
@@ -163,7 +185,7 @@ function App() {
                       <p>Source</p>
                     </div>
                     <div id="source-display-shortitemview-container">
-                      {/*<ItemShort item={sourceItem}/>*/}
+                      <ItemShort item={sourceItem}/>
                     </div>
                   </div>
                   <div id="relation-display-container" className="p-3">
@@ -171,7 +193,7 @@ function App() {
                       <p>Relation</p>
                     </div>
                     <div id="relation-display-selector-container">
-                      <RelationSelector items={mockData.relations} />
+                      <RelationSelector items={[]/*mockData.relations*/} />
                     </div>
                   </div>
                 </div>
@@ -185,11 +207,11 @@ function App() {
                         <p>Target</p>
                       </div>
                       <div className="source-target-display-shortitemview-container">
-                        short item view...
+                        <ItemShort item={targetItem}/>
                       </div>
                     </div>
                     <div id="draw-display-container" className="p-3">
-                    <button className="button">Draw</button>
+                    <button className="button" disabled={!canDraw}>Draw</button>
                     </div>
                   </div>
                 </div>

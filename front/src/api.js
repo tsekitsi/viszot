@@ -3,30 +3,24 @@ import axios from 'axios'
 const baseUrl = 'http://localhost:3001'
 
 const fetchCollections = async (userId) => {
-  const response = await axios.get(`https://api.zotero.org/users/7809590/collections/top`, { // `${baseUrl}/api/get-collection-items`, {
-    headers: {                                          //
-      Authorization: 'Bearer ###'  //  temporary!
-    },                                                  //
+  const response = await axios.get(`${baseUrl}/api/users/${userId}/collections`, {
     params: {
       userId: userId
     }
   })
 
-  return response.data // response.data. ...
+  return response.data
 }
 
 const fetchCollectionItems = async (userId, collectionKey) => {
-  const response = await axios.get(`https://api.zotero.org/users/7809590/collections/${collectionKey}/items/top`, { // `${baseUrl}/api/get-collection-items`, {
-    headers: {                                          //
-      Authorization: 'Bearer ###'  //  temporary!
-    },                                                  //
+  const response = await axios.get(`/api/users/${userId}/collections/${collectionKey}/items`, {
     params: {
       userId: userId,
       collectionKey: collectionKey
     }
   })
 
-  return response.data // response.data. ...
+  return response.data
 }
 
 export { fetchCollections, fetchCollectionItems }

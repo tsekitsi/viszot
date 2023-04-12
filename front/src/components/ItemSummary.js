@@ -6,14 +6,22 @@ import { faRightFromBracket, faBullseye } from '@fortawesome/free-solid-svg-icon
 
 fontawesome.library.add(faRightFromBracket, faBullseye)
 
-const ItemSummary = ({ currentSource, toggleCurrentSource, item }) => {
-  let colorStyles = {}
-  if (currentSource) {
-    if (currentSource.key == item.key) {
-      colorStyles = {
-        color: 'white',
-        backgroundColor: '#485fc7'
-      }
+const ItemSummary = ({ item, source, target, onChooseSource, onChooseTarget }) => {
+  // Update action buttons' bg colors apporpriately:
+  const selectedColorStyles = {
+    color: 'white',
+    backgroundColor: '#485fc7'
+  }
+  let sourceColorStyles = {}
+  let targetColorStyles = {}
+  if (source) {
+    if (source.key === item.key) {
+      sourceColorStyles = selectedColorStyles
+    }
+  }
+  if (target) {
+    if (target.key === item.key) {
+      targetColorStyles = selectedColorStyles
     }
   }
   
@@ -26,14 +34,19 @@ const ItemSummary = ({ currentSource, toggleCurrentSource, item }) => {
     </div>
     <div className='li-actions flex-row g'>
       <button
-        onClick={(item)=>{toggleCurrentSource(item)}}
-        style={colorStyles}
+        onClick={()=>{onChooseSource(item)}}
+        style={sourceColorStyles}
         title='Make Source'
         className='is-size-7 button p-1'
       >
         <FontAwesomeIcon icon="fa-solid fa-right-from-bracket" />
       </button>
-      <button onClick={()=>{}} title='Make Target' className='is-size-7 button p-1'>
+      <button
+        onClick={()=>{onChooseTarget(item)}}
+        style={targetColorStyles}
+        title='Make Target'
+        className='is-size-7 button p-1'
+      >
         <FontAwesomeIcon icon="fa-solid fa-bullseye" />
       </button>
     </div>
