@@ -15,7 +15,7 @@ function App() {
   const [newUserReqd, setNewUserReqd] = useState(false)
   const [oauthd, setOauthd] = useState(false)
   
-  const [sourceItem, setSourceItem] = useState(null)
+  // const [sourceItem, setSourceItem] = useState(null)
 
   // This will run when the app renders for the first time:
   useEffect(() => {
@@ -80,9 +80,9 @@ function App() {
                   </div>
                   <div id="list-display-itemslist-container">
                     <ItemList
-                      currentSource={sourceItem}
-                      toggleCurrentSource={setSourceItem}
-                      items={mockData.items}
+                      /*currentSource={sourceItem}
+                      toggleCurrentSource={setSourceItem}*/
+                      collection={mockData.collections[1]}
                     />
                   </div>
                 </div>

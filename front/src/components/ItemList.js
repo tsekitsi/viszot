@@ -1,14 +1,19 @@
 import './ItemList.css'
 
+import { useState } from 'react'
 import ItemSummary from './ItemSummary'
 
-const itemList = ({ currentSource, toggleCurrentSource, items }) => {
+const ItemList = ({ /*currentSource, toggleCurrentSource,*/ collection }) => {
+  const [items, setItems] = useState([])
+  const [sourceItem, setSourceItem] = useState(null)
+  const [targetItem, setTargetItem] = useState(null)
+  
   const listItems = items.map((item) => 
     <ItemSummary
       key={item.key}
       item={item}
-      currentSource={currentSource}
-      toggleCurrentSource={toggleCurrentSource}
+      /*currentSource={currentSource}
+      toggleCurrentSource={toggleCurrentSource}*/
     />
   )
 
@@ -21,4 +26,4 @@ const itemList = ({ currentSource, toggleCurrentSource, items }) => {
   )
 }
 
-export default itemList
+export default ItemList
