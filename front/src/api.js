@@ -13,7 +13,7 @@ const fetchCollections = async (userId) => {
 }
 
 const fetchCollectionItems = async (userId, collectionKey) => {
-  const response = await axios.get(`/api/users/${userId}/collections/${collectionKey}/items`, {
+  const response = await axios.get(`${baseUrl}/api/users/${userId}/collections/${collectionKey}/items`, {
     params: {
       userId: userId,
       collectionKey: collectionKey

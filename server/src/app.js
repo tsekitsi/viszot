@@ -6,6 +6,7 @@ const sjcl = require('sjcl')
 const DBconn = require('./classes/DBconn')
 const OAuthClient = require('./classes/OAuthClient')
 const { default: api } = require('zotero-api-client');
+const fetch = require('node-fetch')
 
 const KEY = process.env.MY_ENCR_KEY
 
@@ -40,6 +41,13 @@ let oaClient // = new OAuthClient()
 //   console.log(apiResponse)
 // })
 
+const getZoteroUserInfo = async (userId) => {
+  const accessTokenInfo = JSON.parse(sjcl.decrypt(KEY, (await db.getAccessToken(userId))))
+  const zoteroUserId = accessTokenInfo['userID']
+  const zoteroApiKey = accessTokenInfo['oauth_token_secret']
+  return [zoteroUserId, zoteroApiKey]
+}
+
 // Root endpoint:
 app.get('/', (req, res) => {
   res.json({'message': 'ok'})
@@ -65,7 +73,8 @@ app.get('/api/connect/:id', async (req, res) => {
       const accessTokenInfo = await oaClient.requestAccessToken(oauth_token, oauth_verifier)
       //^ now we need to trade oauth_verifier for access token.
       await db.saveAccessToken(userId, sjcl.encrypt(KEY, JSON.stringify(accessTokenInfo)))
-      res.status(200)
+      // Redirect to the VisZot frontend:
+      res.redirect(301, 'http://localhost:3000') // res.status(200)
     }
     if (!(await db.getAccessToken(userId))) { // (oauthState < 2) {
       // Get a request_token and send user off to zotero to authorize.
@@ -87,6 +96,73 @@ app.get('/api/is-connected/:id', async (req, res) => {
   try {
     const bool = (await db.getAccessToken(userId)) ? 1 : 0
     res.status(200).send(`${bool}`)
+  } catch (err) {
+    res.status(500).send(err.message)
+  }
+})
+
+app.get('/api/users/:id/collections', async (req, res) => {
+  const userId = req.params.id
+  try {
+    const [zoteroUserId, zoteroApiKey] = await getZoteroUserInfo(userId)
+    const data = await (await fetch(`https://api.zotero.org/users/${zoteroUserId}/collections/top`, {
+      headers: {
+        Authorization: `Bearer ${zoteroApiKey}`
+      }
+    })).json()
+    res.status(200).send(data)
+  } catch (err) {
+    res.status(500).send(err.message)
+  }
+})
+
+app.get('/api/users/:id/collections/:key/items', async (req, res) => {
+  const userId = req.params.id
+  const collectionKey = req.params.key
+  try {
+    const [zoteroUserId, zoteroApiKey] = await getZoteroUserInfo(userId)
+    const data = await (await fetch(`https://api.zotero.org/users/${zoteroUserId}/collections/${collectionKey}/items/top`, {
+      headers: {
+        Authorization: `Bearer ${zoteroApiKey}`
+      }
+    })).json()
+    res.status(200).send(data)
+  } catch (err) {
+    res.status(500).send(err.message)
+  }
+})
+
+app.get('/api/users/:id/items/:key', async (req, res) => {
+  const userId = req.params.id
+  const itemKey = req.params.key
+  try {
+    const [zoteroUserId, zoteroApiKey] = await getZoteroUserInfo(userId)
+    const data = await (await fetch(`https://api.zotero.org/users/${zoteroUserId}/items/${itemKey}`, {
+      headers: {
+        Authorization: `Bearer ${zoteroApiKey}`
+      }
+    })).json()
+    res.status(200).send(data)
+  } catch (err) {
+    res.status(500).send(err.message)
+  }
+})
+
+app.patch('/api/users/:id/items/:key', async (req, res) => {
+  const userId = req.params.id
+  const itemKey = req.params.key
+  const version = req.headers['if-unmodified-since-version']
+  try {
+    const [zoteroUserId, zoteroApiKey] = await getZoteroUserInfo(userId)
+    const data = await (await fetch(`https://api.zotero.org/users/${zoteroUserId}/items/${itemKey}`, { // www.zotero.org/support/dev/web_api/v3/write_requests#partial-item_updating_patch
+      headers: {
+        Authorization: `Bearer ${zoteroApiKey}`,
+        'If-Unmodified-Since-Version': version
+      },
+      method: 'patch',
+      body: JSON.stringify(req.body)
+    })).text()
+    res.status(200).send(data)
   } catch (err) {
     res.status(500).send(err.message)
   }

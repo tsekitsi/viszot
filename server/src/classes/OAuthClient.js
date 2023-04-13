@@ -71,7 +71,7 @@ class OAuthClient {
   }
 
   // Returns the url of the Zotero authorize endpoint with the request token added as a query parameter:
-  makeAuthUrl = (token) => `${this.endpoints.authorize}?oauth_token=${token}`
+  makeAuthUrl = (token) => `${this.endpoints.authorize}?oauth_token=${token}&library_access=1&notes_access=1&write_access=1&all_groups=write`
 }
 
 module.exports = OAuthClient
