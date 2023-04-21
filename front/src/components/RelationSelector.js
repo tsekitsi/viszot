@@ -6,8 +6,7 @@ import { useState } from 'react'
 
 fontawesome.library.add(faAngleDown, faPlus)
 
-const RelationSelector = ({ items }) => {
-  const [selectedItem, setSelectedItem] = useState('Select a relation...')
+const RelationSelector = ({ activeRelation, items, onRelationSelect }) => {
   const [lastSelectedItemElement, setLSIE] = useState(null)
 
   const getTheDropDownElmtFromDescendant = (descendantElmt) => {
@@ -40,16 +39,16 @@ const RelationSelector = ({ items }) => {
   const handleItemClick = (event, clickedItem) => {
     event.preventDefault()
 
+    // Send selected Collection up to the App component:
+    onRelationSelect(clickedItem)
+
     // Update everything re last selected item:
     if (lastSelectedItemElement) lastSelectedItemElement.classList.remove('is-active')
     event.target.classList.add('is-active')
     setLSIE(event.target) // update last Selected Item Element
-    
-    // Update state:
-    setSelectedItem(clickedItem)
   }
 
-  let listItems = items.map((item, index) =>
+  let listItems = (items) ? items.map((item, index) =>
     <a
       key={index}
       href='#'
@@ -58,7 +57,7 @@ const RelationSelector = ({ items }) => {
     >
       {item}
     </a>
-  )
+  ) : []
 
   // Add the "+ New" option to create a new type of relation:
   listItems = [
@@ -77,7 +76,7 @@ const RelationSelector = ({ items }) => {
     <div className="dropdown">
       <div className="dropdown-trigger">
         <button onClick={toggleDropDownDisplay} className="button" aria-haspopup="true" aria-controls="relations-dropdown-menu">
-          <span>{selectedItem}</span>
+          <span>{(activeRelation) ? activeRelation : 'Select a relation...'}</span>
           <span className="icon is-small">
             <FontAwesomeIcon icon="fa-solid fa-angle-down" />
           </span>

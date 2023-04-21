@@ -6,7 +6,9 @@ import CollectionSelector from './components/CollectionSelector'
 import RelationSelector from './components/RelationSelector'
 import ItemList from './components/ItemList'
 import ItemShort from './components/ItemShort'
-import { fetchCollections, fetchCollectionItems } from './api'
+import Viewer from './components/Viewer'
+import { addEdge, calcGraph, extractRelations } from './helpers'
+import { fetchItem, fetchCollections, fetchCollectionItems } from './api'
 
 function App() {
   const apiBaseUrl = 'http://localhost:3001'
@@ -16,9 +18,9 @@ function App() {
   const [collections, setCollections] = useState([])
   const [activeCollection, setActiveCollection] = useState(null)
   const [items, setItems] = useState([])
-  const [sourceItem, setSourceItem] = useState(null)
+  const [sourceItem, setSourceItem] = useState(null) // useState(mockItems[0])
   const [targetItem, setTargetItem] = useState(null)
-  const [relations, setRelations] = useState([])
+  const [relations, setRelations] = useState([]) // useState(['contrasts', 'extends'])
   const [activeRelation, setActiveRelation] = useState(null)
   const [canDraw, setCanDraw] = useState(false)
 
@@ -55,14 +57,15 @@ function App() {
     if (activeCollection) // if not null..
       fetchCollectionItems(userId, activeCollection.key).then((res) => {
         setItems(res)
+        setRelations(extractRelations(res))
       })
   }, [activeCollection])
 
   const handleCollectionSelect = (selectedCollection) => {
-    // When the user selects a collection, we update the activeCollection & relations pieces of state
+    // When the user selects a collection, we update the activeCollection & relations* (*in useEffect) pieces of state
     //     and reset the sourceItem, targetItem, activeRelation, and canDraw pieces of state:
     setActiveCollection(selectedCollection)
-    // TO-DO!
+
     setSourceItem(null)
     setTargetItem(null)
     setActiveRelation(null)
@@ -78,6 +81,14 @@ function App() {
     setTargetItem(chosenTarget)
     setCanDraw(true && sourceItem)
   }
+
+  const handleDraw = async () =>
+    addEdge(userId, sourceItem, targetItem, activeRelation).then(async (status) => {
+      if (status == 200) {
+        setItems(await fetchCollectionItems(userId, activeCollection.key))
+        setSourceItem(await fetchItem(userId, sourceItem.key))
+      }
+    })
 
   return (
     <div className="App">
@@ -103,7 +114,7 @@ function App() {
                   </div>
                   <div id="list-display-itemslist-container">
                     <ItemList
-                      items={items}//{mockData.items}//
+                      items={items}//{mockItems}//
                       source={sourceItem}
                       target={targetItem}
                       onChooseSource={handleChooseSource}
@@ -119,7 +130,7 @@ function App() {
                       <p>Source</p>
                     </div>
                     <div id="source-display-shortitemview-container">
-                      <ItemShort item={sourceItem}/>
+                      <ItemShort item={sourceItem} />
                     </div>
                   </div>
                   <div id="relation-display-container" className="p-3">
@@ -127,12 +138,16 @@ function App() {
                       <p>Relation</p>
                     </div>
                     <div id="relation-display-selector-container">
-                      <RelationSelector items={[]/*mockData.relations*/} />
+                      <RelationSelector
+                        activeRelation={activeRelation}
+                        items={relations}
+                        onRelationSelect={setActiveRelation}
+                      />
                     </div>
                   </div>
                 </div>
                 <div id="viewer-container">
-
+                  <Viewer data={calcGraph(sourceItem, activeRelation)} />
                 </div>
                 <div id="bottombar-container" className="ml-6 mr-6">
                   <div className="flex-row vertical-center">
@@ -141,11 +156,11 @@ function App() {
                         <p>Target</p>
                       </div>
                       <div className="source-target-display-shortitemview-container">
-                        <ItemShort item={targetItem}/>
+                        <ItemShort item={targetItem} />
                       </div>
                     </div>
                     <div id="draw-display-container" className="p-3">
-                    <button className="button" disabled={!canDraw}>Draw</button>
+                      <button className="button" onClick={handleDraw} disabled={!canDraw}>Draw</button>
                     </div>
                   </div>
                 </div>

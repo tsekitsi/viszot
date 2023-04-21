@@ -8,7 +8,7 @@ import { useState } from 'react'
 fontawesome.library.add(faAngleDown)
 
 const CollectionSelector = ({ collections, onCollectionSelect }) => {
-  const [selectedCollection, setSelectedCollection] = useState({data: {name: 'Select a collection...'}})
+  const [selectedCollection, setSelectedCollection] = useState({data: {name: 'Select a collection...'}}) // useState({ key: 'TJSB7TNF', data: { name: 'Sample Collection #1' } })
   const [lastSelectedCollectionElement, setLSIE] = useState(null)
 
   const getTheDropDownElmtFromDescendant = (descendantElmt) => {

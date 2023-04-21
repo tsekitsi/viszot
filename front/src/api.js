@@ -23,4 +23,20 @@ const fetchCollectionItems = async (userId, collectionKey) => {
   return response.data
 }
 
-export { fetchCollections, fetchCollectionItems }
+const fetchItem = async (userId, itemKey) => {
+  const response = await axios.get(`${baseUrl}/api/users/${userId}/items/${itemKey}`)
+
+  return response.data
+}
+
+const patchItem = async (userId, itemKey, version, newObj) => {
+  const response = await axios.patch(`${baseUrl}/api/users/${userId}/items/${itemKey}`, {
+    extra: JSON.stringify(newObj)
+  }, {
+    headers: { 'if-unmodified-since-version': version }
+  })
+
+  return response.status
+}
+
+export { fetchCollections, fetchCollectionItems, fetchItem, patchItem }
