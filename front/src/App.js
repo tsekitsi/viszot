@@ -7,6 +7,7 @@ import RelationSelector from './components/RelationSelector'
 import ItemList from './components/ItemList'
 import ItemShort from './components/ItemShort'
 import Viewer from './components/Viewer'
+import DefineRelation from './components/DefineRelation'
 import { addEdge, calcGraph, extractRelations } from './helpers'
 import { fetchItem, fetchCollections, fetchCollectionItems } from './api'
 
@@ -50,7 +51,7 @@ function App() {
     fetchCollections(userId).then((res) => {
       setCollections(res)
     })
-  }, [oauthd])
+  }, [userId, oauthd])
 
   // This will run when the "activeCollection" piece of state gets updated:
   useEffect(() => {
@@ -59,7 +60,7 @@ function App() {
         setItems(res)
         setRelations(extractRelations(res))
       })
-  }, [activeCollection])
+  }, [userId, activeCollection, items])
 
   const handleCollectionSelect = (selectedCollection) => {
     // When the user selects a collection, we update the activeCollection & relations* (*in useEffect) pieces of state
@@ -84,7 +85,7 @@ function App() {
 
   const handleDraw = async () =>
     addEdge(userId, sourceItem, targetItem, activeRelation).then(async (status) => {
-      if (status == 200) {
+      if (status === 200) {
         setItems(await fetchCollectionItems(userId, activeCollection.key))
         setSourceItem(await fetchItem(userId, sourceItem.key))
       }
@@ -165,6 +166,14 @@ function App() {
                   </div>
                 </div>
               </div>
+              <DefineRelation
+                userId={userId}
+                items={items}
+                source={sourceItem}
+                activeCollection={activeCollection}
+                onItemsUpdate={setItems}
+                onSourceUpdate={setSourceItem}
+              />
             </div>
           ) :
           (

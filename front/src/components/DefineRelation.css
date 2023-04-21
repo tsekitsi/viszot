@@ -1,0 +1,43 @@
+.container {
+  position: initial;
+}
+
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 32em;
+  height: 10em;
+
+  background-color: white;
+  border: 1px solid;
+  border-color: #dbdbdb;
+  border-radius: 12px;
+
+  box-shadow: 0 0 2em rgba(0, 0, 0, 0.1);
+}
+
+.overlay-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.close-container {
+  display: flex;
+  
+  justify-content: right;
+}
+
+.close-popup {
+  margin: 4px;
+
+  border: none;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: row;
+}

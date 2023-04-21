@@ -64,8 +64,10 @@ const RelationSelector = ({ activeRelation, items, onRelationSelect }) => {
     ...listItems,
     <a
       key={listItems.length}
+      id='new-relation-btn'
       href='#'
-      onClick={(event) => {}}
+      onClick={(event) => {document.querySelector('.overlay').setAttribute('style', '')}}
+      // ^ removes the "display:none" style
       className='dropdown-item'
     >
       <FontAwesomeIcon icon="fa-solid fa-plus" /> New

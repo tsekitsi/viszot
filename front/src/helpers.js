@@ -61,10 +61,11 @@ const addEdge = async (userId, source, target, relation) => {
   }
   
   try {
-    if (!target) { // used in the case of defining a new relation type.
-      extraObj.viszot.relations[relation] = []
-    } else if (!extraObj.viszot.relations[relation]) { // if the relation is not instantiated for this item..
-      extraObj.viszot.relations[relation] = [target.key]
+    if (!extraObj.viszot.relations[relation]) { // if the relation is not instantiated for this item..
+      if (!target) // used in the case of defining a new relation type.
+        extraObj.viszot.relations[relation] = []
+      else
+        extraObj.viszot.relations[relation] = [target.key]
       const item = await fetchItem(userId, source.key) // get source's latest version.
       const sourceVersion = item.version
       return await patchItem(userId, source.key, sourceVersion, extraObj)

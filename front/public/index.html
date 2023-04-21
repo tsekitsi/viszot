@@ -41,8 +41,19 @@
     -->
     <script>
       document.addEventListener("click", function (event) {
-          closeDropdowns();
-        });
+        // Close the relation definition pop-up, if clicked outside of it while open.
+        var overlayElmt = document.querySelector('.overlay')
+        if (
+          (event.target.id !== 'new-relation-btn') &&
+          !(event.target === overlayElmt || overlayElmt.contains(event.target))
+          ) {
+          if (overlayElmt.getAttribute('style') === null || overlayElmt.getAttribute('style') === '') {
+            overlayElmt.setAttribute('style', 'display:none')
+          }
+        }
+
+        closeDropdowns();
+      });
 
       function closeDropdowns() {
         var $dropdowns = document.querySelectorAll(".dropdown:not(.is-hoverable)");
